@@ -1,4 +1,4 @@
-# FresherNote
+# ResolutionQuest
 
 [Heroku link][heroku] **NB:** This should be a link to your production site
 
@@ -6,7 +6,7 @@
 
 ## Minimum Viable Product
 
-FresherNote is a web application inspired by Evernote built using Ruby on Rails
+ResolutionQuest is a web application inspired by HabitRPG built using Ruby on Rails
 and React.js. FresherNote allows users to:
 
 <!-- This is a Markdown checklist. Use it to keep track of your
@@ -14,10 +14,14 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 
 - [ ] Create an account
 - [ ] Log in / Log out
-- [ ] Create, read, edit, and delete notes
-- [ ] Organize notes within Notebooks
-- [ ] Tag notes with multiple tags
-- [ ] Apply complex styling to notes while editing
+- [ ] Create, read, edit, and delete habits, to-dos, daily tasks, and rewards
+- [ ] Organize tasks and to-dos by importance and frequency
+- [ ] Tag tasks and to-dos with tags
+- [ ] Apply complex styling to tasks and to-dos while editing
+- [ ] Ability to create a player avatar from different presets
+- [ ] Create a gold management system, with the ability to "buy" rewards
+- [ ] Create health points and experience for player
+- [ ] Reward/punish the player for completing/failing to complete certain tasks
 
 ## Design Docs
 * [View Wireframes][views]
@@ -44,77 +48,76 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 - [ ] user signup/signin pages
 - [ ] blank landing page after signin
 
-### Phase 2: Notes Model, API, and basic APIUtil (1.5 days)
+### Phase 2: Task/To-Dos/Dailies Model, API, and basic APIUtil (1.5 days)
 
-**Objective:** Notes can be created, read, edited and destroyed through
+**Objective:** Tasks can be created, read, edited and destroyed through
 the API.
 
-- [ ] create `Note` model
+- [ ] create `Task` model
 - [ ] seed the database with a small amount of test data
-- [ ] CRUD API for notes (`NotesController`)
-- [ ] jBuilder views for notes
+- [ ] CRUD API for notes (`TasksController`)
+- [ ] jBuilder views for tasks
 - [ ] setup Webpack & Flux scaffold
 - [ ] setup `APIUtil` to interact with the API
 - [ ] test out API interaction in the console.
+- [ ] Repeat for 'ToDo' and 'Daily Task' models
 
 ### Phase 3: Flux Architecture and Router (1.5 days)
 
-**Objective:** Notes can be created, read, edited and destroyed with the
+**Objective:** Tasks can be created, read, edited and destroyed with the
 user interface.
 
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
 - implement each note component, building out the flux loop as needed.
-  - [ ] `NotesIndex`
-  - [ ] `NoteIndexItem`
-  - [ ] `NoteForm`
-- [ ] save Notes to the DB when the form loses focus or is left idle
+  - [ ] `TasksIndex`
+  - [ ] `TaskIndexItem`
+  - [ ] `TaskForm`
+- [ ] save Tasks to the DB when the form loses focus or is left idle
   after editing.
+- [ ] Repeat for 'ToDo' and 'Daily Task'
 
-### Phase 4: Start Styling (0.5 days)
+### Phase 4: Start Styling (1 day)
 
-**Objective:** Existing pages (including singup/signin) will look good.
+**Objective:** Existing pages (including singup/signin) will look better
 
 - [ ] create a basic style guide
 - [ ] position elements on the page
 - [ ] add basic colors & styles
 
-### Phase 5: Notebooks (1 day)
+### Phase 5: Organization (1.5 days)
 
-**Objective:** Notes belong to Notebooks, and can be viewed by notebook.
-
-- [ ] create `Notebook` model
-- build out API, Flux loop, and components for:
-  - [ ] Notebook CRUD
-  - [ ] adding notes requires a notebook
-  - [ ] moving notes to a different notebook
-  - [ ] viewing notes by notebook
-- Use CSS to style new views
-
-Phase 3 adds organization to the Notes. Notes belong to a Notebook,
-which has its own `Index` view.
-
-### Phase 6: Tags (1.5 days)
-
-**Objective:** Notes can be tagged with multiple tags, and tags are searchable.
+**Objective:** Tasks can be ordered by tags, importance, or frequency
 
 - [ ] create `Tag` model and join table
 - build out API, Flux loop, and components for:
-  - [ ] fetching tags for notebook
-  - [ ] adding tags to notebook
-  - [ ] creating tags while adding to notebooks
-  - [ ] searching notebooks by tag
+  - [ ] fetching tags
+  - [ ] adding tags
+  - [ ] creating tags
+  - [ ] searching by tag
+- [ ] Allow tasks to be given a level of importance by a user
+- [ ] Allow tasks to be ordered by importance
 - [ ] Style new elements
 
-### Phase 7: Allow Complex Styling in Notes (0.5 days)
+### Phase 7: Allow Complex Styling in Tasks (0.5 days)
 
-**objective:** Enable complex styling of notes.
+**objective:** Enable complex styling of tasks.
 
 - [ ] Integrate `react-quill` (based on Quill.js).
 - [ ] Use Rails helpers to sanitize HTML before rendering.
 - [ ] Style the new Quill elements.
 
-### Phase 8: Styling Cleanup and Seeding (1 day)
+### Phase 8: Avatar and Rewards System (1.5 days)
+
+**objective:** Enable avatar creation by user and rewards purchased with gold
+
+- [ ] Create new 'Avatar' model
+- [ ] Enable acquiring gold after each completed task
+- [ ] Create new rewards
+- [ ] Seed database with different items and avatar combinations
+- [ ] Style new elements
+
+### Phase 9: Styling Cleanup and Seeding (1 day)
 
 **objective:** Make the site feel more cohesive and awesome.
 
@@ -123,11 +126,10 @@ which has its own `Index` view.
 - [ ] Add modals, transitions, and other styling flourishes.
 
 ### Bonus Features (TBD)
-- [ ] Search through notes for blocks of text
-- [ ] Pagination / infinite scroll for Notes Index
-- [ ] Set reminders on notes
-- [ ] Changelogs for Notes
-- [ ] Multiple sessions
+- [ ] Create health and experience for user
+- [ ] Reward/punish user based on tasks completed/uncompleted
+- [ ] Set reminders on tasks
+- [ ] Assign each task a frequency (based on # times performed)
 
 [phase-one]: ./docs/phases/phase1.md
 [phase-two]: ./docs/phases/phase2.md
