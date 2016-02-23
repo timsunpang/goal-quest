@@ -1,4 +1,4 @@
-# ResolutionQuest
+# GoalQuest
 
 [Heroku link][heroku] **NB:** This should be a link to your production site
 
@@ -6,7 +6,7 @@
 
 ## Minimum Viable Product
 
-ResolutionQuest is a web application inspired by HabitRPG built using Ruby on Rails
+GoalQuest is a web application inspired by HabitRPG built using Ruby on Rails
 and React.js. FresherNote allows users to:
 
 <!-- This is a Markdown checklist. Use it to keep track of your
