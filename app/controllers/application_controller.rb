@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   def sign_in(user)
     @current_user = user
-    user.session_token = session[:session_token]
+    session[:session_token] = user.session_token
   end
 
   def sign_out(user)

@@ -3,7 +3,7 @@ class StaticPagesController < ApplicationController
     if signed_in?
       render :root
     else
-      render :login
+      redirect_to new_session_url
     end
   end
 end

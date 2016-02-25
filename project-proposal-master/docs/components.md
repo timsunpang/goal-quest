@@ -8,7 +8,7 @@
     * `ToDosIndex`
       * `ToDoForm`
       * `ToDoIndexItem`
-    * `DailiessIndex`
+    * `DailiesIndex`
       * `DailiesForm`
       * `DailiesIndexItem`
   * `Navbar`

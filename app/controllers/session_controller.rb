@@ -1,26 +1,29 @@
 class SessionController < ApplicationController
   def new
     @user = User.new
-    redirect_to root_url
+    render :new
   end
 
   def create
-    @user = User.find_by_credentials(*user_params)
+    # debugger
+    @user = User.find_by_credentials(*user_params.values)
     if @user
-      @user.sign_in
-      redirect_to user_url
-    else
+      flash[:notice] = ["Logged in"]
+      sign_in(@user)
       redirect_to root_url
+    else
+      flash[:error] = ["Invalid username or password"]
+      render :new
     end
   end
 
   def destroy
     sign_out(current_user)
-    redirect_to root_url
+    redirect_to new_session_url
   end
 
   private
   def user_params
-    params.require(:user).permit(:username, :session_token)
+    params.require(:user).permit(:username, :password, :session_token)
   end
 end

@@ -8,12 +8,24 @@
 </head>
 <body>
 
+<% if flash %>
+  <% flash.each do |category, msg| %>
+    <%= msg.join('<br>').html_safe%><br>
+  <% end %>
+<% end %>
+
+<% if signed_in? %>
+  Welcome, <%= current_user.username %>
+<% end %>
+
 <%= yield %>
 
 <% if signed_in? %>
-  <%= button_to "Log Out", session_url, :method => :delete%>
+  <%= button_to "Log Out", session_url(:id), method: :delete%>
 <% else %>
-  <%= button_to "Sign Up", new_session_url unless current_page?(new_session_url) %>
+  <%= link_to "Or sign up as a new user!", new_user_url unless current_page?(new_user_url) %><br>
+  <%= link_to "Or take a guest tour!", new_session_url unless current_page?(new_user_url) %>
+
 <% end %>
 
 </body>
