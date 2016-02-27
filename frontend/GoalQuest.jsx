@@ -2,6 +2,13 @@ var React = require('react'),
     ReactDOM = require('react-dom'),
     ApiUtil = require('./util/apiUtil'),
     GoalStore = require('./stores/GoalStore');
+    ReactRouter = require('react-router'),
+    Router = ReactRouter.Router,
+    Route = ReactRouter.Route,
+    hashHistory = ReactRouter.hashHistory,
+    Header = require('./components/header.jsx'),
+    Content = require('./components/content.jsx');
+
 
 var App = React.createClass({
 
@@ -22,21 +29,29 @@ var App = React.createClass({
     this.goalListener.remove();
   },
 
-  handleDestroy: function(){
-    console.log("DELETE!")
+  handleDestroy: function(id){
+    console.log(id);
+    ApiUtil.destroyGoal(id);
+    console.log("delete!");
   },
 
   render: function(){
     var that = this;
 
-    return <ul>
-        {this.state.goals.map(function (goal) {
-          return <li>{goal.title}
-            <button onClick= {that.handleDestroy}>Delete</button>
-            <button>Complete</button>
-          </li>
-        })}
-      </ul>;
+    return (
+      <main>
+        <Header />
+        <ul>
+          {this.state.goals.map(function (goal) {
+            return <li>{goal.title}
+              <button onClick={that.handleDestroy.bind(this, goal.id)}>Delete</button>
+              <button>Complete</button>
+            </li>
+          })}
+        </ul>
+        <Content />
+      </main>
+      )
     }
   });
 

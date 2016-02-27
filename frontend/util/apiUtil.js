@@ -9,6 +9,16 @@ var ApiUtil = {
         ApiActions.receiveAllGoals(goals);
       }
     })
+  },
+
+  destroyGoal: function(id) {
+    $.ajax({
+      url: "api/goals/" + id,
+      method: "delete",
+      success: function () {
+        ApiActions.removeGoal(id);
+      }
+    })
   }
 };
 

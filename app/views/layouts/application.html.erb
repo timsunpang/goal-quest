@@ -2,11 +2,12 @@
 <html>
 <head>
   <title>ResolutionQuest</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+
+<%= yield %>
 
 <% if flash %>
   <% flash.each do |category, msg| %>
@@ -18,7 +19,7 @@
   Welcome, <%= current_user.username %>
 <% end %>
 
-<%= yield %>
+
 
 <% if signed_in? %>
   <%= button_to "Log Out", session_url(:id), method: :delete%>

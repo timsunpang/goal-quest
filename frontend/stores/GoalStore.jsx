@@ -40,7 +40,13 @@ GoalStore.create = function(todo) {
 };
 
 GoalStore.destroy = function(id) {
-
+  if (_goals[id]){
+    delete _goals[id];
+    GoalStore.__emitChange();
+    console.log("success")
+  } else {
+    console.log("error")
+  }
 };
 
 GoalStore.toggleDone = function(id) {
@@ -54,6 +60,10 @@ GoalStore.__onDispatch = function (payload) {
     GoalStore.__emitChange();
     break;
   case GoalConstants.GOAL_RECEIVED:
+    GoalStore.__emitChange();
+    break;
+  case GoalConstants.GOAL_DELETED:
+    GoalStore.destroy(payload.id);
     GoalStore.__emitChange();
     break;
   }

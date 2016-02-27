@@ -1,0 +1,249 @@
+body {
+  background-color: #eee;
+}
+
+.header {
+  position: relative;
+  display: block;
+  top: 0px;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: grey;
+  color: white;
+  border-style: solid;
+  border-width: 0px 0px 1px;
+  z-index: 1;
+}
+
+.header a {
+  display: block;
+  padding: 10px 20px;
+  transition: .5s;
+}
+
+.nhat_bar {
+  width: 900px;
+  margin: 0px auto;
+  border-left: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+}
+
+.header-logo {
+  float: left;
+  border-right: 1px solid #ccc;
+  font-weight: 700;
+  transition: .35s;
+  padding-top: 10px;
+  margin-top: -10px;
+}
+
+.header-logo:hover {
+  background: #000;
+  transform: translateY(10px);
+}
+
+.header-list {
+  float: right;
+}
+
+.header-list > li {
+  float: left;
+  padding-top: 10px;
+  margin-top: -10px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  margin-right: -1px;
+  transition: .35s;
+}
+
+.header-list > li:hover {
+  background: #000;
+  transform: translateY(10px);
+  z-index: 1000;
+  box-shadow: 3px 3px 7px rgba(0,0,0,.25);
+}
+
+/* Content */
+
+.content {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  background: #fff;
+  width: 900px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.content:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 240px;
+  width: 1px;
+  background: #ccc;
+}
+
+.content-sidebar {
+  float: left;
+  width: 200px;
+  min-height: 200px;
+  padding: 20px;
+}
+
+.content-main {
+  float: left;
+  width: 620px;
+  min-height: 200px;
+  padding: 20px;
+}
+
+/* Footer */
+
+.footer {
+  position: relative;
+  display: block;
+  top: 0px;
+  font-size: 14px;
+  color: black;
+  border-style: solid;
+  border-width: 0px 0px 0px;
+  margin-bottom: 100px;
+  z-index: 1;
+}
+
+.footer a {
+  display: block;
+  padding: 10px 20px;
+}
+
+.footer-nav {
+  width: 900px;
+  margin: 0px auto;
+  background-color: white;
+  border: 1px solid #CCC;
+}
+
+.footer-nav-copyright {
+  float: left;
+  display: block;
+  padding: 10px 20px;
+}
+
+.footer-nav-list {
+  float: right;
+}
+
+.footer-nav-list > li {
+  float: left;
+  margin-right: -1px;
+}
+
+.footer-nav-list > li:hover {
+  color: grey;
+}
+
+/* Sidebar */
+
+.profile-picture {
+  display: block;
+  margin-top: 0px;
+  border: 1px solid #000;
+  background: #000;
+  border-radius: 5px;
+  position: relative;
+}
+
+.profile-info {
+  margin: 20px 0;
+}
+
+.profile-info > h2 {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.profile-info > p {
+  margin: 20px 0;
+}
+
+.profile-nav {
+  margin: 20px 0;
+}
+
+.profile-nav > li {
+  border-bottom: 1px solid #ccc;
+  display: block;
+  padding: 5px;
+  font-weight: 700;
+}
+
+.profile-nav > li:first-child {
+  border-top: 1px solid #ccc;
+}
+
+.hp-empty {
+  margin: 5px auto 5px auto;
+  position: relative;
+  display: block;
+	width: 200px;
+	height: 20px;
+  border: 1px solid black;
+	background: white;
+  border-radius: 10px;
+}
+
+.lifebar
+{
+  background-color: green;
+  width: 90%;
+  height: 100%;
+  border-radius: 9px;
+}
+
+.exp-empty {
+  margin: 5px auto 5px auto;
+  position: relative;
+  display: block;
+	width: 200px;
+	height: 20px;
+  border: 1px solid black;
+	background: white;
+  border-radius: 10px;
+}
+
+.expbar
+{
+  background-color: yellow;
+  width: 37%;
+  height: 100%;
+  border-radius: 9px;
+}
+
+/* Main - Card */
+#card {
+  margin: 0px auto;
+  display: block;
+	width: 330px;
+	height: 150px;
+  border: 1px solid black;
+  background-color: rgba(192,192,192,.3);
+  border-radius: 10px;
+  padding: 3px;
+}
+
+#goal-title {
+  text-align: center;
+  display: block;
+  margin: 0px auto;
+  font-size: 24px;
+}
+
+#goals {
+  margin: 0px auto;
+  overflow: auto;
+  width: 97%;
+  height: 80%;
+}

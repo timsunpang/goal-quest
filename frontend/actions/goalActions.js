@@ -7,5 +7,12 @@ module.exports = {
       actionType: GoalConstants.GOALS_RECEIVED,
       goals: goals
     });
+  },
+
+  removeGoal: function (id) {
+    Dispatcher.dispatch({
+      actionType: GoalConstants.GOAL_DELETED,
+      id: id
+    });
   }
 }
