@@ -14,13 +14,10 @@ var GoalForm = React.createClass({
     };
   },
 
-  componentWillMount: function(){
-    UpdateStore.addListener(this.buttonConfirmChanges);
-  },
-
   confirmChanges: function(e){
     e.preventDefault();
     ApiUtil.updateGoal(this.props.goal.id, this.state)
+    this.props.handleEdit();
   },
 
   buttonConfirmChanges: function(){

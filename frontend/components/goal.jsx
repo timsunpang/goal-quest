@@ -9,32 +9,32 @@ var Goal = React.createClass({
 
   getInitialState: function(){
     return {
-      goal: this.props.goal,
-      display: this.props.goal.title,
+      // goal: this.props.goal,
+      // display: this.props.goal.title,
       editing: false
     };
   },
 
+  // componentWillReceiveProps(newProps){
+  //   this.setState(
+  //     goal: newProps.goal
+  //   });
+  // },
+
   handleDestroy: function(){
-    ApiUtil.destroyGoal(this.state.goal.id);
+    ApiUtil.destroyGoal(this.props.goal.id);
+    console.log("destroy");
   },
 
   handleComplete: function(){
-    ApiUtil.completeGoal(this.state.goal.id);
+    ApiUtil.completeGoal(this.props.goal.id);
+    console.log("complete");
   },
 
   handleEdit: function(){
-    if (this.state.editing) {
-      this.setState({
-        display: this.props.goal.title,
-        editing: false
-      })
-    } else {
-      this.setState({
-        display: <GoalForm goal={this.state.goal}/>,
-        editing: true
-      })
-    }
+    this.setState({
+      editing: !this.state.editing
+    });
   },
 
   confirmChanges: function(){
@@ -46,23 +46,39 @@ var Goal = React.createClass({
   },
 
   render: function() {
-    var that = this;
-    var button2Class = this.state.editing ? 'button icon remove' : 'button icon edit';
-    var button3Callback = this.state.editing ? that.confirmChanges : that.handleComplete;
-    var button2Text = this.state.editing ? 'Cancel' : 'Edit';
-    var button3Text = this.state.editing ? 'Confirm' : 'Complete';
-    var button3Type = this.state.editing ? 'submit' : '';
-    var button3Form = this.state.editing ? 'editform' : '';
-
-    return (<div>
-      {this.state.display}
+    // var this = this;
+    // var button2Class = this.state.editing ? 'button icon remove' : 'button icon edit';
+    // var button3Callback = this.state.editing ? that.confirmChanges : that.handleComplete;
+    // var button2Text = this.state.editing ? 'Cancel' : 'Edit';
+    // var button3Text = this.state.editing ? 'Confirm' : 'Complete';
+    // var button3Type = this.state.editing ? 'submit' : '';
+    // var button3Form = this.state.editing ? 'editform' : '';
+    console.log("goal rendering!!");
+    if(this.state.editing){
+      return (
         <div>
-        <button className= 'button icon trash' onClick={that.handleDestroy}>Delete</button>
-        <button className= {button2Class} onClick={that.handleEdit}>{button2Text}</button>
-        <button className= "button icon approve" onClick={button3Callback} type={button3Type} form={button3Form}>{button3Text}</button>
+          <GoalForm goal={this.props.goal} handleEdit={this.handleEdit}/>
+          <div>
+            <button className= 'button icon trash' onClick={this.handleDestroy}>Delete</button>
+            <button className= 'button icon remove' onClick={this.handleEdit}>Cancel</button>
+            <input type="submit" value="Confirm" form="editform" className= "button icon approve"/>
+          </div>
         </div>
-      </div>)
+      )
+    } else {
+      return (
+        <div>
+          {this.props.goal.title}
+          <div>
+            <button className= 'button icon trash' onClick={this.handleDestroy}>Delete</button>
+            <button className= 'button icon edit' onClick={this.handleEdit}>Edit</button>
+            <button className= "button icon approve" onClick={this.handleComplete}>Complete</button>
+          </div>
+        </div>
+      )
     }
+  }
+
 });
 
 module.exports = Goal;

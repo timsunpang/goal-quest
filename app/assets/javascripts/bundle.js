@@ -19743,7 +19743,7 @@
 	      method: "patch",
 	      data: { goal: params },
 	      success: function (goal) {
-	        ApiActions.confirmGoalChange(goal);
+	        ApiActions.receiveGoal(goal);
 	      }
 	    });
 	  }
@@ -19777,12 +19777,6 @@
 	    Dispatcher.dispatch({
 	      actionType: GoalConstants.GOAL_RECEIVED,
 	      goal: goal
-	    });
-	  },
-
-	  confirmGoalChange: function () {
-	    Dispatcher.dispatch({
-	      actionType: GoalConstants.UPDATE_GOAL
 	    });
 	  }
 	};
@@ -20109,8 +20103,7 @@
 	module.exports = {
 	  GOALS_RECEIVED: "GOALS_RECIEVED",
 	  GOAL_RECEIVED: "GOAL_RECEIVED",
-	  GOAL_DELETED: "GOAL_DELETED",
-	  UPDATE_GOAL: "UPDATE_GOAL"
+	  GOAL_DELETED: "GOAL_DELETED"
 	};
 
 /***/ },
@@ -20134,7 +20127,6 @@
 
 	var addGoal = function (goal) {
 	  _goals[goal.id] = goal;
-	  updating = false;
 	};
 
 	GoalStore.all = function () {
@@ -20173,8 +20165,6 @@
 	  return updating;
 	};
 
-	GoalStore.toggleDone = function (id) {};
-
 	GoalStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case GoalConstants.GOALS_RECEIVED:
@@ -20184,7 +20174,7 @@
 	    case GoalConstants.GOAL_RECEIVED:
 	      addGoal(payload.goal);
 	      GoalStore.__emitChange();
-	      console.log("Goal Completed!");
+	      console.log("Goal Updated!");
 	      break;
 	    case GoalConstants.GOAL_DELETED:
 	      GoalStore.destroy(payload.id);
@@ -31745,8 +31735,8 @@
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(158),
-	    Sidebar = __webpack_require__(243);
-	MainContent = __webpack_require__(244);
+	    Sidebar = __webpack_require__(243),
+	    MainContent = __webpack_require__(244);
 
 	var Content = React.createClass({
 	  displayName: 'Content',
@@ -31824,6 +31814,29 @@
 	  }
 	});
 
+	var lvlToExp = function (lvl) {
+	  var xpAry = function (max) {
+	    if (max === 1) {
+	      return [4];
+	    } else {
+	      oldAry = xpAry(max - 1);
+	      oldAry.push(oldAry[oldAry.length - 1] + 4);
+	      return oldAry;
+	    }
+	  };
+	  return xpAry(lvl).reduce(function (sum, num) {
+	    return sum + num;
+	  });
+	};
+
+	var expToLvl = function (exp) {
+	  var lvl;
+	  for (var i = 1; exp % lvlToExp(i) < exp; i++) {
+	    lvl = i;
+	  };
+	  return lvl;
+	};
+
 	module.exports = Sidebar;
 
 /***/ },
@@ -31832,35 +31845,101 @@
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(158),
-	    GoalList = __webpack_require__(245);
+	    GoalList = __webpack_require__(245),
+	    LinkedStateMixin = __webpack_require__(247);
 
 	var MainContent = React.createClass({
 	  displayName: 'MainContent',
 
+
+	  mixins: [LinkedStateMixin],
+
+	  getInitialState: function () {
+	    return {
+	      adding: false,
+	      title: '',
+	      description: ''
+	    };
+	  },
+
+	  toggleAdding: function () {
+	    this.setState({ adding: !this.state.adding });
+	  },
+
+	  confirmChanges: function () {},
+
 	  render: function () {
-	    return React.createElement(
-	      'main',
-	      { className: 'content-main' },
-	      React.createElement(
-	        'div',
-	        { id: 'card' },
+	    if (this.state.adding) {
+	      return React.createElement(
+	        'main',
+	        { className: 'content-main' },
 	        React.createElement(
 	          'div',
-	          { id: 'goal-title' },
-	          'Goals',
+	          { id: 'card' },
 	          React.createElement(
-	            'button',
-	            { className: 'button add icon', id: 'goal-add' },
-	            ' Add '
+	            'div',
+	            { id: 'goal-title' },
+	            'Goals',
+	            React.createElement(
+	              'button',
+	              { className: 'button remove icon', onClick: this.toggleAdding },
+	              ' Cancel '
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	              'form',
+	              { onSubmit: this.confirmChanges },
+	              React.createElement(
+	                'p',
+	                null,
+	                React.createElement('input', { type: 'text', valueLink: this.linkState("title") })
+	              )
+	            ),
+	            React.createElement(
+	              'form',
+	              { id: 'editform', onSubmit: this.confirmChanges },
+	              React.createElement(
+	                'p',
+	                null,
+	                React.createElement('textarea', { valueLink: this.linkState("description") })
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { id: 'goals' },
+	            React.createElement(GoalList, null)
 	          )
-	        ),
+	        )
+	      );
+	    } else {
+	      return React.createElement(
+	        'main',
+	        { className: 'content-main' },
 	        React.createElement(
 	          'div',
-	          { id: 'goals' },
-	          React.createElement(GoalList, null)
+	          { id: 'card' },
+	          React.createElement(
+	            'div',
+	            { id: 'goal-title' },
+	            'Goals',
+	            React.createElement(
+	              'button',
+	              { className: 'button add icon', onClick: this.toggleAdding },
+	              ' Add '
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { id: 'goals' },
+	            React.createElement(GoalList, null)
+	          )
 	        )
-	      )
-	    );
+	      );
+	    };
 	  }
 	});
 
@@ -31904,10 +31983,10 @@
 	      React.createElement(
 	        'ul',
 	        null,
-	        this.state.goals.map(function (goal) {
+	        this.state.goals.map(function (goal, i) {
 	          return React.createElement(
 	            'li',
-	            null,
+	            { key: i },
 	            ' ',
 	            React.createElement(Goal, { goal: goal })
 	          );
@@ -31936,32 +32015,32 @@
 
 	  getInitialState: function () {
 	    return {
-	      goal: this.props.goal,
-	      display: this.props.goal.title,
+	      // goal: this.props.goal,
+	      // display: this.props.goal.title,
 	      editing: false
 	    };
 	  },
 
+	  // componentWillReceiveProps(newProps){
+	  //   this.setState(
+	  //     goal: newProps.goal
+	  //   });
+	  // },
+
 	  handleDestroy: function () {
-	    ApiUtil.destroyGoal(this.state.goal.id);
+	    ApiUtil.destroyGoal(this.props.goal.id);
+	    console.log("destroy");
 	  },
 
 	  handleComplete: function () {
-	    ApiUtil.completeGoal(this.state.goal.id);
+	    ApiUtil.completeGoal(this.props.goal.id);
+	    console.log("complete");
 	  },
 
 	  handleEdit: function () {
-	    if (this.state.editing) {
-	      this.setState({
-	        display: this.props.goal.title,
-	        editing: false
-	      });
-	    } else {
-	      this.setState({
-	        display: React.createElement(GoalForm, { goal: this.state.goal }),
-	        editing: true
-	      });
-	    }
+	    this.setState({
+	      editing: !this.state.editing
+	    });
 	  },
 
 	  confirmChanges: function () {
@@ -31973,39 +32052,63 @@
 	  },
 
 	  render: function () {
-	    var that = this;
-	    var button2Class = this.state.editing ? 'button icon remove' : 'button icon edit';
-	    var button3Callback = this.state.editing ? that.confirmChanges : that.handleComplete;
-	    var button2Text = this.state.editing ? 'Cancel' : 'Edit';
-	    var button3Text = this.state.editing ? 'Confirm' : 'Complete';
-	    var button3Type = this.state.editing ? 'submit' : '';
-	    var button3Form = this.state.editing ? 'editform' : '';
-
-	    return React.createElement(
-	      'div',
-	      null,
-	      this.state.display,
-	      React.createElement(
+	    // var this = this;
+	    // var button2Class = this.state.editing ? 'button icon remove' : 'button icon edit';
+	    // var button3Callback = this.state.editing ? that.confirmChanges : that.handleComplete;
+	    // var button2Text = this.state.editing ? 'Cancel' : 'Edit';
+	    // var button3Text = this.state.editing ? 'Confirm' : 'Complete';
+	    // var button3Type = this.state.editing ? 'submit' : '';
+	    // var button3Form = this.state.editing ? 'editform' : '';
+	    console.log("goal rendering!!");
+	    if (this.state.editing) {
+	      return React.createElement(
 	        'div',
 	        null,
+	        React.createElement(GoalForm, { goal: this.props.goal, handleEdit: this.handleEdit }),
 	        React.createElement(
-	          'button',
-	          { className: 'button icon trash', onClick: that.handleDestroy },
-	          'Delete'
-	        ),
-	        React.createElement(
-	          'button',
-	          { className: button2Class, onClick: that.handleEdit },
-	          button2Text
-	        ),
-	        React.createElement(
-	          'button',
-	          { className: 'button icon approve', onClick: button3Callback, type: button3Type, form: button3Form },
-	          button3Text
+	          'div',
+	          null,
+	          React.createElement(
+	            'button',
+	            { className: 'button icon trash', onClick: this.handleDestroy },
+	            'Delete'
+	          ),
+	          React.createElement(
+	            'button',
+	            { className: 'button icon remove', onClick: this.handleEdit },
+	            'Cancel'
+	          ),
+	          React.createElement('input', { type: 'submit', value: 'Confirm', form: 'editform', className: 'button icon approve' })
 	        )
-	      )
-	    );
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        this.props.goal.title,
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'button',
+	            { className: 'button icon trash', onClick: this.handleDestroy },
+	            'Delete'
+	          ),
+	          React.createElement(
+	            'button',
+	            { className: 'button icon edit', onClick: this.handleEdit },
+	            'Edit'
+	          ),
+	          React.createElement(
+	            'button',
+	            { className: 'button icon approve', onClick: this.handleComplete },
+	            'Complete'
+	          )
+	        )
+	      );
+	    }
 	  }
+
 	});
 
 	module.exports = Goal;
@@ -32261,13 +32364,10 @@
 	    };
 	  },
 
-	  componentWillMount: function () {
-	    UpdateStore.addListener(this.buttonConfirmChanges);
-	  },
-
 	  confirmChanges: function (e) {
 	    e.preventDefault();
 	    ApiUtil.updateGoal(this.props.goal.id, this.state);
+	    this.props.handleEdit();
 	  },
 
 	  buttonConfirmChanges: function () {
@@ -32315,7 +32415,7 @@
 	UpdateStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case GoalConstants.UPDATE_GOAL:
-	      UpdateStore.__emitChange();
+	      // UpdateStore.__emitChange();
 	      break;
 	  }
 	};

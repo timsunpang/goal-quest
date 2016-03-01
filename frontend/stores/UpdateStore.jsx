@@ -7,7 +7,7 @@ var UpdateStore = new Store(AppDispatcher);
 UpdateStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
   case GoalConstants.UPDATE_GOAL:
-    UpdateStore.__emitChange();
+    // UpdateStore.__emitChange();
     break;
   }
 };

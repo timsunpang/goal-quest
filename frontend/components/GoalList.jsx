@@ -26,8 +26,8 @@ var GoalList = React.createClass({
 
     return <div>
     <ul>
-    {this.state.goals.map(function (goal) {
-      return <li> <Goal goal={goal}/>
+    {this.state.goals.map(function (goal, i) {
+      return <li key={i}> <Goal goal={goal}/>
       </li>
     })}
     </ul>

@@ -1,6 +1,6 @@
 var React = require('react'),
     ReactDOM = require('react-dom'),
-    Sidebar = require('./sidebar.jsx');
+    Sidebar = require('./sidebar.jsx'),
     MainContent = require('./maincontent.jsx');
 
 var Content = React.createClass({

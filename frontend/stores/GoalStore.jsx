@@ -15,7 +15,6 @@ var resetGoals = function (goals) {
 
 var addGoal = function (goal) {
   _goals[goal.id] = goal;
-  updating = false;
 };
 
 GoalStore.all = function () {
@@ -52,10 +51,6 @@ GoalStore.isUpdating = function(){
   return updating;
 };
 
-GoalStore.toggleDone = function(id) {
-
-};
-
 GoalStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
   case GoalConstants.GOALS_RECEIVED:
@@ -65,7 +60,7 @@ GoalStore.__onDispatch = function (payload) {
   case GoalConstants.GOAL_RECEIVED:
     addGoal(payload.goal)
     GoalStore.__emitChange();
-    console.log("Goal Completed!")
+    console.log("Goal Updated!")
     break;
   case GoalConstants.GOAL_DELETED:
     GoalStore.destroy(payload.id);

@@ -21,11 +21,5 @@ module.exports = {
       actionType: GoalConstants.GOAL_RECEIVED,
       goal: goal
     })
-  },
-
-  confirmGoalChange: function() {
-    Dispatcher.dispatch({
-      actionType: GoalConstants.UPDATE_GOAL
-    })
   }
 }

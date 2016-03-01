@@ -35,4 +35,31 @@ var Sidebar = React.createClass({
   }
 });
 
+
+var lvlToExp = function(lvl)
+{
+  var xpAry = function(max)
+  {
+    if ( max === 1 )
+    {
+      return [4];
+    }
+    else
+    {
+      oldAry = xpAry(max - 1);
+      oldAry.push( oldAry[oldAry.length - 1] + 4);
+      return oldAry;
+    }
+  };
+  return xpAry(lvl).reduce(function(sum, num) {return sum + num});
+};
+
+var expToLvl = function(exp) {
+  var lvl;
+  for (var i = 1; exp % lvlToExp(i) < exp; i++) {
+    lvl = i
+  };
+  return lvl;
+};
+
 module.exports = Sidebar;

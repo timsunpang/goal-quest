@@ -38,7 +38,7 @@ var ApiUtil = {
       method: "patch",
       data: { goal: params },
       success: function (goal) {
-        ApiActions.confirmGoalChange(goal);
+        ApiActions.receiveGoal(goal);
       }
     })
   }
