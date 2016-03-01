@@ -4,13 +4,18 @@ var GoalConstants = require('../constants/goalConstants.js');
 
 var GoalStore = new Store(AppDispatcher);
 var _goals = {};
-var _callbacks = [];
+var updating = false;
 
 var resetGoals = function (goals) {
   _goals = {};
   goals.forEach(function(goal){
     _goals[goal.id] = goal;
   })
+};
+
+var addGoal = function (goal) {
+  _goals[goal.id] = goal;
+  updating = false;
 };
 
 GoalStore.all = function () {
@@ -21,19 +26,13 @@ GoalStore.all = function () {
   return goals;
 };
 
-GoalStore.changed = function () {
-  _callbacks.forEach(function(callback) {
-    callback();
-  });
-};
+GoalStore.uncompleted = function() {
+  return GoalStore.all().filter(function(goal) {return goal.completed === false});
+}
 
-GoalStore.addChangedHandler = function() {
-
-};
-
-GoalStore.removeChangedHandler = function() {
-
-};
+GoalStore.allCompleted = function() {
+  return GoalStore.all().filter(function(goal) {return goal.completed === true});
+}
 
 GoalStore.create = function(todo) {
 
@@ -49,6 +48,10 @@ GoalStore.destroy = function(id) {
   }
 };
 
+GoalStore.isUpdating = function(){
+  return updating;
+};
+
 GoalStore.toggleDone = function(id) {
 
 };
@@ -60,7 +63,9 @@ GoalStore.__onDispatch = function (payload) {
     GoalStore.__emitChange();
     break;
   case GoalConstants.GOAL_RECEIVED:
+    addGoal(payload.goal)
     GoalStore.__emitChange();
+    console.log("Goal Completed!")
     break;
   case GoalConstants.GOAL_DELETED:
     GoalStore.destroy(payload.id);

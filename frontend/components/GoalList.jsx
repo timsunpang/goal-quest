@@ -1,14 +1,15 @@
 var React = require('react');
 var GoalStore = require('../stores/GoalStore.jsx');
 var ApiUtil = require('../util/apiUtil.js');
+var Goal = require('./goal.jsx');
 
 var GoalList = React.createClass({
   getInitialState: function(){
-    return { goals: GoalStore.all()};
+    return { goals: GoalStore.uncompleted()};
   },
 
   _onChange: function(){
-    this.setState({goals: GoalStore.all()})
+    this.setState({goals: GoalStore.uncompleted()})
   },
 
   componentDidMount: function(){
@@ -20,21 +21,13 @@ var GoalList = React.createClass({
     this.goalListener.remove();
   },
 
-  handleDestroy: function(id){
-    console.log(id);
-    ApiUtil.destroyGoal(id);
-    console.log("delete!");
-  },
-
   render: function(){
     var that = this;
 
     return <div>
     <ul>
     {this.state.goals.map(function (goal) {
-      return <li>{goal.title}
-      <button onClick={that.handleDestroy.bind(this, goal.id)}>Delete</button>
-      <button>Complete</button>
+      return <li> <Goal goal={goal}/>
       </li>
     })}
     </ul>

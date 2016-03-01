@@ -15,5 +15,6 @@
 class Goal < ActiveRecord::Base
   validates :title, :user_id, :card_id, presence: true
   validates :priority, inclusion: {in: (1..5).to_a}
+  validates :completed, inclusion: {in: [true, false]}
   belongs_to :user
 end

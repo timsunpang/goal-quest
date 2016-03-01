@@ -7,7 +7,7 @@ var Content = React.createClass({
   render: function() {
     return(
       <content className="content group">
-        <Sidebar />
+        <Sidebar completedGoalCount={this.props.completedGoalCount}/>
         <MainContent />
       </content>
     )

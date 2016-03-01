@@ -12,14 +12,27 @@ and React.js. FresherNote allows users to:
 <!-- This is a Markdown checklist. Use it to keep track of your
 progress. Put an x between the brackets for a checkmark: [x] -->
 
-- [ ] Create an account
-- [ ] Log in / Log out
+- [x] Create an account
+- [x] Log in / Log out
 - [ ] Create, read, edit, and delete habits, to-dos, daily tasks, and rewards
+  - [ ] Display to-dos
+  - [ ] Delete to-dos
+  - [ ] Create new to-dos
+  - [ ] Edit to-dos
 - [ ] Organize tasks and to-dos by importance and frequency
-- [ ] Tag tasks and to-dos with tags
-- [ ] Apply complex styling to tasks and to-dos while editing
+
+* Avatar/Items
 - [ ] Ability to create a player avatar from different presets
 - [ ] Create a gold management system, with the ability to "buy" rewards
+- [ ] Ability to purchase armor, awards from different shops
+- [ ] Create Armor and item menu
+
+* Styling
+- [ ] Create shuffling cards
+- [ ] Create a more interesting sidebar
+- [ ] More navbar stylings
+
+* Game logic
 - [ ] Create health points and experience for player
 - [ ] Reward/punish the player for completing/failing to complete certain tasks
 
@@ -130,6 +143,7 @@ user interface.
 - [ ] Reward/punish user based on tasks completed/uncompleted
 - [ ] Set reminders on tasks
 - [ ] Assign each task a frequency (based on # times performed)
+- [ ] Tag tasks and to-dos with tags
 
 [phase-one]: ./docs/phases/phase1.md
 [phase-two]: ./docs/phases/phase2.md

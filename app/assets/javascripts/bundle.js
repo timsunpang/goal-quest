@@ -48,18 +48,22 @@
 	    ReactDOM = __webpack_require__(158),
 	    ApiUtil = __webpack_require__(159),
 	    GoalStore = __webpack_require__(166);
-	ReactRouter = __webpack_require__(184), Router = ReactRouter.Router, Route = ReactRouter.Route, hashHistory = ReactRouter.hashHistory, Header = __webpack_require__(241), Content = __webpack_require__(242);
+	ReactRouter = __webpack_require__(184), Router = ReactRouter.Router, Route = ReactRouter.Route, hashHistory = ReactRouter.hashHistory, Header = __webpack_require__(241), Content = __webpack_require__(242), Footer = __webpack_require__(253);
 
 	var App = React.createClass({
 	  displayName: 'App',
 
 
 	  getInitialState: function () {
-	    return { goals: GoalStore.all() };
+	    return { goals: GoalStore.all(),
+	      completedGoalCount: GoalStore.allCompleted().length };
 	  },
 
 	  _onChange: function () {
-	    this.setState({ goals: GoalStore.all() });
+	    this.setState({
+	      goals: GoalStore.all(),
+	      completedGoalCount: GoalStore.allCompleted().length
+	    });
 	  },
 
 	  componentDidMount: function () {
@@ -84,28 +88,8 @@
 	      'main',
 	      null,
 	      React.createElement(Header, null),
-	      React.createElement(
-	        'ul',
-	        null,
-	        this.state.goals.map(function (goal) {
-	          return React.createElement(
-	            'li',
-	            null,
-	            goal.title,
-	            React.createElement(
-	              'button',
-	              { onClick: that.handleDestroy.bind(this, goal.id) },
-	              'Delete'
-	            ),
-	            React.createElement(
-	              'button',
-	              null,
-	              'Complete'
-	            )
-	          );
-	        })
-	      ),
-	      React.createElement(Content, null)
+	      React.createElement(Content, { completedGoalCount: this.state.completedGoalCount }),
+	      React.createElement(Footer, null)
 	    );
 	  }
 	});
@@ -19740,6 +19724,28 @@
 	        ApiActions.removeGoal(id);
 	      }
 	    });
+	  },
+
+	  completeGoal: function (id) {
+	    $.ajax({
+	      url: "api/goals/" + id,
+	      method: "patch",
+	      data: { goal: { completed: true } },
+	      success: function (goal) {
+	        ApiActions.receiveGoal(goal);
+	      }
+	    });
+	  },
+
+	  updateGoal: function (id, params) {
+	    $.ajax({
+	      url: "api/goals/" + id,
+	      method: "patch",
+	      data: { goal: params },
+	      success: function (goal) {
+	        ApiActions.confirmGoalChange(goal);
+	      }
+	    });
 	  }
 	};
 
@@ -19764,6 +19770,19 @@
 	    Dispatcher.dispatch({
 	      actionType: GoalConstants.GOAL_DELETED,
 	      id: id
+	    });
+	  },
+
+	  receiveGoal: function (goal) {
+	    Dispatcher.dispatch({
+	      actionType: GoalConstants.GOAL_RECEIVED,
+	      goal: goal
+	    });
+	  },
+
+	  confirmGoalChange: function () {
+	    Dispatcher.dispatch({
+	      actionType: GoalConstants.UPDATE_GOAL
 	    });
 	  }
 	};
@@ -20090,7 +20109,8 @@
 	module.exports = {
 	  GOALS_RECEIVED: "GOALS_RECIEVED",
 	  GOAL_RECEIVED: "GOAL_RECEIVED",
-	  GOAL_DELETED: "GOAL_DELETED"
+	  GOAL_DELETED: "GOAL_DELETED",
+	  UPDATE_GOAL: "UPDATE_GOAL"
 	};
 
 /***/ },
@@ -20103,13 +20123,18 @@
 
 	var GoalStore = new Store(AppDispatcher);
 	var _goals = {};
-	var _callbacks = [];
+	var updating = false;
 
 	var resetGoals = function (goals) {
 	  _goals = {};
 	  goals.forEach(function (goal) {
 	    _goals[goal.id] = goal;
 	  });
+	};
+
+	var addGoal = function (goal) {
+	  _goals[goal.id] = goal;
+	  updating = false;
 	};
 
 	GoalStore.all = function () {
@@ -20120,15 +20145,17 @@
 	  return goals;
 	};
 
-	GoalStore.changed = function () {
-	  _callbacks.forEach(function (callback) {
-	    callback();
+	GoalStore.uncompleted = function () {
+	  return GoalStore.all().filter(function (goal) {
+	    return goal.completed === false;
 	  });
 	};
 
-	GoalStore.addChangedHandler = function () {};
-
-	GoalStore.removeChangedHandler = function () {};
+	GoalStore.allCompleted = function () {
+	  return GoalStore.all().filter(function (goal) {
+	    return goal.completed === true;
+	  });
+	};
 
 	GoalStore.create = function (todo) {};
 
@@ -20142,6 +20169,10 @@
 	  }
 	};
 
+	GoalStore.isUpdating = function () {
+	  return updating;
+	};
+
 	GoalStore.toggleDone = function (id) {};
 
 	GoalStore.__onDispatch = function (payload) {
@@ -20151,7 +20182,9 @@
 	      GoalStore.__emitChange();
 	      break;
 	    case GoalConstants.GOAL_RECEIVED:
+	      addGoal(payload.goal);
 	      GoalStore.__emitChange();
+	      console.log("Goal Completed!");
 	      break;
 	    case GoalConstants.GOAL_DELETED:
 	      GoalStore.destroy(payload.id);
@@ -31722,7 +31755,7 @@
 	    return React.createElement(
 	      'content',
 	      { className: 'content group' },
-	      React.createElement(Sidebar, null),
+	      React.createElement(Sidebar, { completedGoalCount: this.props.completedGoalCount }),
 	      React.createElement(MainContent, null)
 	    );
 	  }
@@ -31798,7 +31831,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(158);
+	    ReactDOM = __webpack_require__(158),
+	    GoalList = __webpack_require__(245);
 
 	var MainContent = React.createClass({
 	  displayName: 'MainContent',
@@ -31813,12 +31847,17 @@
 	        React.createElement(
 	          'div',
 	          { id: 'goal-title' },
-	          'Goals'
+	          'Goals',
+	          React.createElement(
+	            'button',
+	            { className: 'button add icon', id: 'goal-add' },
+	            ' Add '
+	          )
 	        ),
 	        React.createElement(
 	          'div',
 	          { id: 'goals' },
-	          'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+	          React.createElement(GoalList, null)
 	        )
 	      )
 	    );
@@ -31826,6 +31865,530 @@
 	});
 
 	module.exports = MainContent;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var GoalStore = __webpack_require__(166);
+	var ApiUtil = __webpack_require__(159);
+	var Goal = __webpack_require__(246);
+
+	var GoalList = React.createClass({
+	  displayName: 'GoalList',
+
+	  getInitialState: function () {
+	    return { goals: GoalStore.uncompleted() };
+	  },
+
+	  _onChange: function () {
+	    this.setState({ goals: GoalStore.uncompleted() });
+	  },
+
+	  componentDidMount: function () {
+	    this.goalListener = GoalStore.addListener(this._onChange);
+	    ApiUtil.fetchAllGoals();
+	  },
+
+	  componentWillUnmount: function () {
+	    this.goalListener.remove();
+	  },
+
+	  render: function () {
+	    var that = this;
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'ul',
+	        null,
+	        this.state.goals.map(function (goal) {
+	          return React.createElement(
+	            'li',
+	            null,
+	            ' ',
+	            React.createElement(Goal, { goal: goal })
+	          );
+	        })
+	      )
+	    );
+	  }
+	});
+
+	module.exports = GoalList;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(159);
+	var LinkedStateMixin = __webpack_require__(247);
+	var GoalForm = __webpack_require__(251);
+	var GoalActions = __webpack_require__(160);
+
+	var Goal = React.createClass({
+	  displayName: 'Goal',
+
+	  mixins: [LinkedStateMixin],
+
+	  getInitialState: function () {
+	    return {
+	      goal: this.props.goal,
+	      display: this.props.goal.title,
+	      editing: false
+	    };
+	  },
+
+	  handleDestroy: function () {
+	    ApiUtil.destroyGoal(this.state.goal.id);
+	  },
+
+	  handleComplete: function () {
+	    ApiUtil.completeGoal(this.state.goal.id);
+	  },
+
+	  handleEdit: function () {
+	    if (this.state.editing) {
+	      this.setState({
+	        display: this.props.goal.title,
+	        editing: false
+	      });
+	    } else {
+	      this.setState({
+	        display: React.createElement(GoalForm, { goal: this.state.goal }),
+	        editing: true
+	      });
+	    }
+	  },
+
+	  confirmChanges: function () {
+	    // GoalActions.confirmGoalChange();
+	    this.setState({
+	      editing: false,
+	      display: this.props.goal.title
+	    });
+	  },
+
+	  render: function () {
+	    var that = this;
+	    var button2Class = this.state.editing ? 'button icon remove' : 'button icon edit';
+	    var button3Callback = this.state.editing ? that.confirmChanges : that.handleComplete;
+	    var button2Text = this.state.editing ? 'Cancel' : 'Edit';
+	    var button3Text = this.state.editing ? 'Confirm' : 'Complete';
+	    var button3Type = this.state.editing ? 'submit' : '';
+	    var button3Form = this.state.editing ? 'editform' : '';
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.state.display,
+	      React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'button',
+	          { className: 'button icon trash', onClick: that.handleDestroy },
+	          'Delete'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: button2Class, onClick: that.handleEdit },
+	          button2Text
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'button icon approve', onClick: button3Callback, type: button3Type, form: button3Form },
+	          button3Text
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Goal;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(248);
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule LinkedStateMixin
+	 * @typechecks static-only
+	 */
+
+	'use strict';
+
+	var ReactLink = __webpack_require__(249);
+	var ReactStateSetters = __webpack_require__(250);
+
+	/**
+	 * A simple mixin around ReactLink.forState().
+	 */
+	var LinkedStateMixin = {
+	  /**
+	   * Create a ReactLink that's linked to part of this component's state. The
+	   * ReactLink will have the current value of this.state[key] and will call
+	   * setState() when a change is requested.
+	   *
+	   * @param {string} key state key to update. Note: you may want to use keyOf()
+	   * if you're using Google Closure Compiler advanced mode.
+	   * @return {ReactLink} ReactLink instance linking to the state.
+	   */
+	  linkState: function (key) {
+	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
+	  }
+	};
+
+	module.exports = LinkedStateMixin;
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactLink
+	 * @typechecks static-only
+	 */
+
+	'use strict';
+
+	/**
+	 * ReactLink encapsulates a common pattern in which a component wants to modify
+	 * a prop received from its parent. ReactLink allows the parent to pass down a
+	 * value coupled with a callback that, when invoked, expresses an intent to
+	 * modify that value. For example:
+	 *
+	 * React.createClass({
+	 *   getInitialState: function() {
+	 *     return {value: ''};
+	 *   },
+	 *   render: function() {
+	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
+	 *     return <input valueLink={valueLink} />;
+	 *   },
+	 *   _handleValueChange: function(newValue) {
+	 *     this.setState({value: newValue});
+	 *   }
+	 * });
+	 *
+	 * We have provided some sugary mixins to make the creation and
+	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
+	 */
+
+	var React = __webpack_require__(2);
+
+	/**
+	 * @param {*} value current value of the link
+	 * @param {function} requestChange callback to request a change
+	 */
+	function ReactLink(value, requestChange) {
+	  this.value = value;
+	  this.requestChange = requestChange;
+	}
+
+	/**
+	 * Creates a PropType that enforces the ReactLink API and optionally checks the
+	 * type of the value being passed inside the link. Example:
+	 *
+	 * MyComponent.propTypes = {
+	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
+	 * }
+	 */
+	function createLinkTypeChecker(linkType) {
+	  var shapes = {
+	    value: typeof linkType === 'undefined' ? React.PropTypes.any.isRequired : linkType.isRequired,
+	    requestChange: React.PropTypes.func.isRequired
+	  };
+	  return React.PropTypes.shape(shapes);
+	}
+
+	ReactLink.PropTypes = {
+	  link: createLinkTypeChecker
+	};
+
+	module.exports = ReactLink;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactStateSetters
+	 */
+
+	'use strict';
+
+	var ReactStateSetters = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (component, funcReturningState) {
+	    return function (a, b, c, d, e, f) {
+	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
+	      if (partialState) {
+	        component.setState(partialState);
+	      }
+	    };
+	  },
+
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (component, key) {
+	    // Memoize the setters.
+	    var cache = component.__keySetters || (component.__keySetters = {});
+	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
+	  }
+	};
+
+	function createStateKeySetter(component, key) {
+	  // Partial state is allocated outside of the function closure so it can be
+	  // reused with every call, avoiding memory allocation when this function
+	  // is called.
+	  var partialState = {};
+	  return function stateKeySetter(value) {
+	    partialState[key] = value;
+	    component.setState(partialState);
+	  };
+	}
+
+	ReactStateSetters.Mixin = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateSetter(function(xValue) {
+	   *     return {x: xValue};
+	   *   })(1);
+	   *
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (funcReturningState) {
+	    return ReactStateSetters.createStateSetter(this, funcReturningState);
+	  },
+
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateKeySetter('x')(1);
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (key) {
+	    return ReactStateSetters.createStateKeySetter(this, key);
+	  }
+	};
+
+	module.exports = ReactStateSetters;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(159);
+	var LinkedStateMixin = __webpack_require__(247);
+	var UpdateStore = __webpack_require__(252);
+
+	var GoalForm = React.createClass({
+	  displayName: 'GoalForm',
+
+	  mixins: [LinkedStateMixin],
+
+	  getInitialState: function () {
+	    return {
+	      title: this.props.goal.title,
+	      description: this.props.goal.description
+	    };
+	  },
+
+	  componentWillMount: function () {
+	    UpdateStore.addListener(this.buttonConfirmChanges);
+	  },
+
+	  confirmChanges: function (e) {
+	    e.preventDefault();
+	    ApiUtil.updateGoal(this.props.goal.id, this.state);
+	  },
+
+	  buttonConfirmChanges: function () {
+	    ApiUtil.updateGoal(this.props.goal.id, this.state);
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.confirmChanges },
+	        React.createElement(
+	          'p',
+	          null,
+	          React.createElement('input', { type: 'text', valueLink: this.linkState("title") })
+	        )
+	      ),
+	      React.createElement(
+	        'form',
+	        { id: 'editform', onSubmit: this.confirmChanges },
+	        React.createElement(
+	          'p',
+	          null,
+	          React.createElement('textarea', { valueLink: this.linkState("description") })
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = GoalForm;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(161);
+	var Store = __webpack_require__(167).Store;
+	var GoalConstants = __webpack_require__(165);
+
+	var UpdateStore = new Store(AppDispatcher);
+
+	UpdateStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case GoalConstants.UPDATE_GOAL:
+	      UpdateStore.__emitChange();
+	      break;
+	  }
+	};
+
+	module.exports = UpdateStore;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var Footer = React.createClass({
+	  displayName: "Footer",
+
+	  render: function () {
+	    return React.createElement(
+	      "footer",
+	      { className: "footer" },
+	      React.createElement(
+	        "nav",
+	        { className: "footer-nav group" },
+	        React.createElement(
+	          "div",
+	          { className: "footer-nav-copyright" },
+	          "© 2016 Tim Pang."
+	        ),
+	        React.createElement(
+	          "ul",
+	          { className: "footer-nav-list group" },
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "#" },
+	              "Home"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "#" },
+	              "About"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "#" },
+	              "Settings"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "#" },
+	              "Contact"
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Footer;
 
 /***/ }
 /******/ ]);

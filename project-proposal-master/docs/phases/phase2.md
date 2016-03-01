@@ -21,9 +21,9 @@
 * ApiActions.receiveSingleNote
 * ApiActions.deleteNote
 * NoteActions.fetchAllNotes -> triggers ApiUtil
-* NoteActions.fetchSingleNote 
+* NoteActions.fetchSingleNote
 * NoteActions.createNote
-* NoteActions.editNote 
+* NoteActions.editNote
 * NoteActions.destroyNote
 
 ### ApiUtil
@@ -36,3 +36,17 @@
 ## Gems/Libraries
 * Flux Dispatcher (npm)
 * Twitter Bootstrap
+
+
+HP dock feature
+* rake tasks
+* scheduler (heroku)
+Monday
+
+Tuesday
+
+Wednesday
+
+Thursday
+
+Friday

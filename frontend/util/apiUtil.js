@@ -19,6 +19,28 @@ var ApiUtil = {
         ApiActions.removeGoal(id);
       }
     })
+  },
+
+  completeGoal: function(id) {
+    $.ajax({
+      url: "api/goals/" + id,
+      method: "patch",
+      data: { goal: { completed: true } },
+      success: function (goal) {
+        ApiActions.receiveGoal(goal);
+      }
+    })
+  },
+
+  updateGoal: function(id, params) {
+    $.ajax({
+      url: "api/goals/" + id,
+      method: "patch",
+      data: { goal: params },
+      success: function (goal) {
+        ApiActions.confirmGoalChange(goal);
+      }
+    })
   }
 };
 

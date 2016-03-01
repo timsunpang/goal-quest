@@ -20,7 +20,7 @@ class Api::GoalsController < ApplicationController
 
   def update
     @goal = Goal.find_by_id(params[:id])
-    @goal.update_attributes(goals_params)
+    @goal.update!(goals_params)
     render json: @goal
   end
 
@@ -32,6 +32,6 @@ class Api::GoalsController < ApplicationController
 
   private
   def goals_params
-    params.require(:goal).permit(:title, :user_id, :card_id, :priority, :description)
+    params.require(:goal).permit(:title, :user_id, :card_id, :priority, :description, :completed)
   end
 end

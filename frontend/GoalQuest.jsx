@@ -7,17 +7,22 @@ var React = require('react'),
     Route = ReactRouter.Route,
     hashHistory = ReactRouter.hashHistory,
     Header = require('./components/header.jsx'),
-    Content = require('./components/content.jsx');
+    Content = require('./components/content.jsx'),
+    Footer = require('./components/footer.jsx');
 
 
 var App = React.createClass({
 
   getInitialState: function(){
-    return { goals: GoalStore.all()};
+    return {goals: GoalStore.all(),
+      completedGoalCount: GoalStore.allCompleted().length};
   },
 
   _onChange: function(){
-    this.setState({goals: GoalStore.all()})
+    this.setState({
+      goals: GoalStore.all(),
+      completedGoalCount: GoalStore.allCompleted().length
+    })
   },
 
   componentDidMount: function(){
@@ -41,15 +46,8 @@ var App = React.createClass({
     return (
       <main>
         <Header />
-        <ul>
-          {this.state.goals.map(function (goal) {
-            return <li>{goal.title}
-              <button onClick={that.handleDestroy.bind(this, goal.id)}>Delete</button>
-              <button>Complete</button>
-            </li>
-          })}
-        </ul>
-        <Content />
+        <Content completedGoalCount={this.state.completedGoalCount}/>
+        <Footer />
       </main>
       )
     }

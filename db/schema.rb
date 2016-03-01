@@ -11,19 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223235654) do
+ActiveRecord::Schema.define(version: 20160229205115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "goals", force: :cascade do |t|
-    t.string   "title",                   null: false
+    t.string   "title",                       null: false
     t.integer  "priority",    default: 3
     t.text     "description"
-    t.integer  "user_id",                 null: false
-    t.integer  "card_id",     default: 1, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "user_id",                     null: false
+    t.integer  "card_id",     default: 1,     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "completed",   default: false, null: false
   end
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
