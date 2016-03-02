@@ -19746,6 +19746,17 @@
 	        ApiActions.receiveGoal(goal);
 	      }
 	    });
+	  },
+
+	  newGoal: function (params) {
+	    $.ajax({
+	      url: "api/goals/",
+	      method: "post",
+	      data: { goal: params },
+	      success: function (goal) {
+	        ApiActions.receiveGoal(goal);
+	      }
+	    });
 	  }
 	};
 
@@ -31661,10 +31672,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(158);
+	    ReactDOM = __webpack_require__(158),
+	    ApiUtil = __webpack_require__(159);
 
 	var Header = React.createClass({
 	  displayName: 'Header',
+
 
 	  render: function () {
 	    return React.createElement(
@@ -31830,6 +31843,9 @@
 	};
 
 	var expToLvl = function (exp) {
+	  if (exp <= 4) {
+	    return 1;
+	  };
 	  var lvl;
 	  for (var i = 1; exp % lvlToExp(i) < exp; i++) {
 	    lvl = i;
@@ -31846,7 +31862,9 @@
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(158),
 	    GoalList = __webpack_require__(245),
-	    LinkedStateMixin = __webpack_require__(247);
+	    LinkedStateMixin = __webpack_require__(247),
+	    GoalStore = __webpack_require__(166),
+	    ApiUtil = __webpack_require__(159);
 
 	var MainContent = React.createClass({
 	  displayName: 'MainContent',
@@ -31866,7 +31884,10 @@
 	    this.setState({ adding: !this.state.adding });
 	  },
 
-	  confirmChanges: function () {},
+	  confirmChanges: function () {
+	    ApiUtil.newGoal({ title: this.state.title, description: this.state.description });
+	    this.setState({ adding: false });
+	  },
 
 	  render: function () {
 	    if (this.state.adding) {
@@ -31881,9 +31902,14 @@
 	            { id: 'goal-title' },
 	            'Goals',
 	            React.createElement(
-	              'button',
-	              { className: 'button remove icon', onClick: this.toggleAdding },
-	              ' Cancel '
+	              'p',
+	              null,
+	              React.createElement(
+	                'button',
+	                { className: 'button remove icon', onClick: this.toggleAdding },
+	                ' Cancel '
+	              ),
+	              React.createElement('input', { type: 'submit', value: 'Add', form: 'addform', className: 'button add icon' })
 	            )
 	          ),
 	          React.createElement(
@@ -31895,16 +31921,30 @@
 	              React.createElement(
 	                'p',
 	                null,
-	                React.createElement('input', { type: 'text', valueLink: this.linkState("title") })
+	                React.createElement(
+	                  'label',
+	                  { htmlFor: 'add_title' },
+	                  'Title'
+	                ),
+	                React.createElement('input', { type: 'text', id: 'add_title', valueLink: this.linkState("title") })
 	              )
 	            ),
 	            React.createElement(
 	              'form',
-	              { id: 'editform', onSubmit: this.confirmChanges },
+	              { id: 'addform', onSubmit: this.confirmChanges },
 	              React.createElement(
 	                'p',
 	                null,
-	                React.createElement('textarea', { valueLink: this.linkState("description") })
+	                React.createElement(
+	                  'label',
+	                  { htmlFor: 'add_description' },
+	                  'Description'
+	                )
+	              ),
+	              React.createElement(
+	                'p',
+	                null,
+	                React.createElement('textarea', { id: 'add_description', className: 'styled_form', valueLink: this.linkState("description") })
 	              )
 	            )
 	          ),
@@ -31927,9 +31967,13 @@
 	            { id: 'goal-title' },
 	            'Goals',
 	            React.createElement(
-	              'button',
-	              { className: 'button add icon', onClick: this.toggleAdding },
-	              ' Add '
+	              'p',
+	              null,
+	              React.createElement(
+	                'button',
+	                { className: 'button add icon', onClick: this.toggleAdding },
+	                ' Add '
+	              )
 	            )
 	          ),
 	          React.createElement(
@@ -32384,7 +32428,12 @@
 	        React.createElement(
 	          'p',
 	          null,
-	          React.createElement('input', { type: 'text', valueLink: this.linkState("title") })
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'title' },
+	            'Title'
+	          ),
+	          React.createElement('input', { type: 'text', id: 'title', valueLink: this.linkState("title") })
 	        )
 	      ),
 	      React.createElement(
@@ -32393,7 +32442,12 @@
 	        React.createElement(
 	          'p',
 	          null,
-	          React.createElement('textarea', { valueLink: this.linkState("description") })
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'description' },
+	            'Description'
+	          ),
+	          React.createElement('textarea', { id: 'description', className: 'styled_form', valueLink: this.linkState("description") })
 	        )
 	      )
 	    );

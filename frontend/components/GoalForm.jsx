@@ -27,10 +27,15 @@ var GoalForm = React.createClass({
   render: function() {
     return (<div>
         <form onSubmit={this.confirmChanges}>
-          <p><input type= "text" valueLink={this.linkState("title")}></input></p>
+          <p>
+            <label htmlFor="title">Title</label>
+            <input type= "text" id="title" valueLink={this.linkState("title")}></input></p>
         </form>
         <form id="editform" onSubmit={this.confirmChanges}>
-          <p><textarea valueLink={this.linkState("description")}></textarea></p>
+          <p>
+            <label htmlFor="description">Description</label>
+            <textarea id="description" className="styled_form" valueLink={this.linkState("description")}></textarea>
+          </p>
         </form>
       </div>)
     }

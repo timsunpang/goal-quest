@@ -55,6 +55,7 @@ var lvlToExp = function(lvl)
 };
 
 var expToLvl = function(exp) {
+  if (exp <= 4) {return 1};
   var lvl;
   for (var i = 1; exp % lvlToExp(i) < exp; i++) {
     lvl = i

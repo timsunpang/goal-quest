@@ -41,6 +41,17 @@ var ApiUtil = {
         ApiActions.receiveGoal(goal);
       }
     })
+  },
+
+  newGoal: function(params) {
+    $.ajax({
+      url: "api/goals/",
+      method: "post",
+      data: { goal: params },
+      success: function (goal) {
+        ApiActions.receiveGoal(goal);
+      }
+    })
   }
 };
 

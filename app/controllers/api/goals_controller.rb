@@ -1,15 +1,17 @@
 class Api::GoalsController < ApplicationController
   def index
-    @goals = Goal.all
+    @goals = current_user.goals
     render json: @goals
   end
 
   def create
-    @goals = Goal.new(goals_params)
-    if Goal.create!(goals_params)
-      render json: @goals
+    new_params = goals_params
+    new_params["user_id"] = current_user.id
+    @goal = Goal.new(new_params)
+    if Goal.create!(new_params)
+      render json: @goal
     else
-      render json: @goals.errors.full_messages, status: :unprocessable_entity
+      render json: @goal.errors.full_messages, status: :unprocessable_entity
     end
   end
 

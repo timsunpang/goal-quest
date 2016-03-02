@@ -1,7 +1,9 @@
 var React = require('react'),
-    ReactDOM = require('react-dom');
+    ReactDOM = require('react-dom'),
+    ApiUtil = require('../util/apiUtil.js');
 
 var Header = React.createClass({
+
   render: function(){
     return (
       <header className="header">
