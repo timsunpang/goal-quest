@@ -24,10 +24,10 @@ var GoalList = React.createClass({
   render: function(){
     var that = this;
 
-    return <div>
+    return  <div className="goal-list">
     <ul>
     {this.state.goals.map(function (goal, i) {
-      return <li key={i}> <Goal goal={goal}/>
+      return <li key={i} className="goal-li"> <Goal goal={goal} user={that.props.user} completedGoalCount={that.props.completedGoalCount}/>
       </li>
     })}
     </ul>

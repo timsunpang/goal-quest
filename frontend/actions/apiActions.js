@@ -1,11 +1,27 @@
 var Dispatcher = require('../dispatcher/dispatcher.js'),
-    GoalConstants = require('../constants/goalConstants.js');
+    GoalConstants = require('../constants/goalConstants.js'),
+    UserConstants = require('../constants/userConstants.js'),
+    ItemConstants = require('../constants/itemConstants.js');
 
 module.exports = {
   receiveAllGoals: function (goals) {
     Dispatcher.dispatch({
       actionType: GoalConstants.GOALS_RECEIVED,
       goals: goals
+    });
+  },
+
+  receiveAllItems: function (items) {
+    Dispatcher.dispatch({
+      actionType: ItemConstants.ITEMS_RECEIVED,
+      items: items
+    });
+  },
+
+  receiveUser: function(user){
+    Dispatcher.dispatch({
+      actionType: UserConstants.USER_RECEIVED,
+      user: user
     });
   },
 

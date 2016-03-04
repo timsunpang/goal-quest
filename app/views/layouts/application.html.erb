@@ -4,6 +4,7 @@
   <title>GoalQuest</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
+  <link href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
@@ -22,10 +23,10 @@
 
 
 <% if signed_in? %>
-  <%= button_to "Log Out", session_url(:id), method: :delete%>
+  <%= button_to "Log Out", session_url, method: :delete%>
 <% else %>
-  <%= link_to "Or sign up as a new user!", new_user_url unless current_page?(new_user_url) %><br>
-  <%= link_to "Or take a guest tour!", new_session_url unless current_page?(new_user_url) %>
+  <%= link_to "Or sign up as a new user!", new_api_user_url unless current_page?(new_api_user_url) %><br>
+  <%= link_to "Or take a guest tour!", new_session_url unless current_page?(new_api_user_url) %>
 
 <% end %>
 

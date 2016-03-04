@@ -1,4 +1,4 @@
-var ApiActions = require('../actions/goalActions.js');
+var ApiActions = require('../actions/apiActions.js');
 var React = require('react');
 
 var ApiUtil = {
@@ -52,7 +52,48 @@ var ApiUtil = {
         ApiActions.receiveGoal(goal);
       }
     })
+  },
+
+  fetchCurrentUser: function() {
+    $.ajax({
+      url: "api/users",
+      success: function (user) {
+        ApiActions.receiveUser(user);
+      }
+    })
+  },
+
+  updateCurrentUser: function(id, params) {
+    $.ajax({
+      url: "api/users/" + id,
+      method: "patch",
+      data: { user: params },
+      success: function (user) {
+        ApiActions.receiveUser(user);
+      }
+    })
+  },
+
+  fetchAllItems: function() {
+    $.ajax({
+      url: "api/items",
+      success: function (items) {
+        ApiActions.receiveAllItems(items);
+      }
+    })
+  },
+
+  logout: function() {
+    $.ajax({
+      url: "/session",
+      type: "post",
+      data: {_method: 'delete'},
+      success: function() {
+        window.location = "session/new"
+      }
+    })
   }
+
 };
 
 module.exports = ApiUtil;

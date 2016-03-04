@@ -1,17 +1,76 @@
 var React = require('react'),
-    ReactDOM = require('react-dom');
+    ReactDOM = require('react-dom'),
+    Expbar = require('./expbar.jsx'),
+    UserStore = require('./../stores/UserStore'),
+    GoalStore = require('./../stores/GoalStore'),
+    ApiUtil = require('./../util/apiUtil.js');
 
 var Sidebar = React.createClass({
+  contextTypes: {
+      user: React.PropTypes.object.isRequired,
+      completedGoalCount: React.PropTypes.number.isRequired
+   },
+
+
+  getInitialState: function(){
+    return {
+      user: UserStore.retrieve(),
+      completedGoalCount: GoalStore.allCompleted().length,
+    };
+  },
+
+  _onChangeUser: function(){
+    this.setState({user: UserStore.retrieve()});
+    console.log("User listener activated")
+  },
+
+  _onChangeGoal: function(){
+    this.setState({completedGoalCount: GoalStore.allCompleted().length});
+    this.setUserExpLvl();
+  },
+
+  componentDidMount: function(){
+    this.userListener = UserStore.addListener(this._onChangeUser);
+    this.goalListener = GoalStore.addListener(this._onChangeGoal);
+    ApiUtil.fetchCurrentUser();
+  },
+
+  componentWillUnmount: function(){
+    this.userListener.remove();
+    this.goalListener.remove();
+  },
+
+  setUserExpLvl: function(){
+    var exp = this.state.completedGoalCount * 5;
+    var level = expToLvl(exp);
+    ApiUtil.updateCurrentUser(this.state.user.id, {exp: exp, level: level});
+  },
+
   render: function() {
+    if(this.state.user.id === undefined){
+      return <div></div>;
+    }
     return(
       <sidebar className="content-sidebar">
-        <a href="#" className="profile-picture">
-          <img src="http://vignette2.wikia.nocookie.net/donthugme/images/a/ac/YellowDHMIS3.png/revision/latest?cb=20141110022829" alt=""/>
+        <a href="#" className="avatar-container">
+          <img src="/assets/sprite_body4.png"/>
+          <img src="/assets/sprite_body5.png"/>
+          <img src="/assets/sprite_body9.png"/>
+          <img src="/assets/sprite_body2.png"/>
+          <img src="/assets/sprite_body3.png"/>
         </a>
+
+
         <div className="profile-info">
-          <h2>Shrigis</h2>
+          <h2>{this.context.user.username}</h2>
             <p>
-              Son of Ivar the Boneless.
+              Lvl {this.context.user.level}
+            </p>
+            <p>
+              Gold: {this.context.user.gold}
+            </p>
+            <p>
+              Goals completed: {this.context.completedGoalCount}
             </p>
         </div>
 
@@ -19,15 +78,12 @@ var Sidebar = React.createClass({
           <li>
             HP
             <div className="hp-empty">
-              <div className="lifebar">
+              <div className="lifebar glossy green">
               </div>
             </div>
           </li>
           <li>EXP
-            <div className="exp-empty">
-              <div className="expbar">
-              </div>
-            </div>
+            <Expbar user={this.state.user}/>
           </li>
         </ul>
     </sidebar>
@@ -40,14 +96,15 @@ var lvlToExp = function(lvl)
 {
   var xpAry = function(max)
   {
-    if ( max === 1 )
-    {
-      return [4];
+    if ( max === 2 ){
+      return [20];
+    } else if (max < 2){
+      return [0]
     }
     else
     {
       oldAry = xpAry(max - 1);
-      oldAry.push( oldAry[oldAry.length - 1] + 4);
+      oldAry.push( oldAry[oldAry.length - 1] + 20);
       return oldAry;
     }
   };
@@ -55,9 +112,9 @@ var lvlToExp = function(lvl)
 };
 
 var expToLvl = function(exp) {
-  if (exp <= 4) {return 1};
+  if (exp <= 20) {return 1};
   var lvl;
-  for (var i = 1; exp % lvlToExp(i) < exp; i++) {
+  for (var i = 2; exp % lvlToExp(i) < exp; i++) {
     lvl = i
   };
   return lvl;

@@ -1,5 +1,6 @@
 body {
   background-color: #eee;
+  font-family: 'Archivo Narrow', sans-serif;
 }
 
 .header {
@@ -8,7 +9,7 @@ body {
   top: 0px;
   font-size: 16px;
   font-weight: 700;
-  background-color: grey;
+  background-color: black;
   color: white;
   border-style: solid;
   border-width: 0px 0px 1px;
@@ -22,24 +23,23 @@ body {
 }
 
 .nhat_bar {
-  width: 900px;
+  width: 1200px;
   margin: 0px auto;
-  border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
 }
 
 .header-logo {
   float: left;
-  border-right: 1px solid #ccc;
   font-weight: 700;
   transition: .35s;
   padding-top: 10px;
   margin-top: -10px;
+  width: 150px;
+  height: auto;
 }
 
 .header-logo:hover {
-  background: #000;
-  transform: translateY(10px);
+  transform: scale(1.1);
 }
 
 .header-list {
@@ -48,7 +48,8 @@ body {
 
 .header-list > li {
   float: left;
-  padding-top: 10px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   margin-top: -10px;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
@@ -70,9 +71,11 @@ body {
   display: block;
   margin: 0 auto;
   background: #fff;
-  width: 900px;
+  width: 1200px;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
+  padding-bottom: 20px;
+  padding-right: 80px;
 }
 
 .content:before {
@@ -88,16 +91,17 @@ body {
 
 .content-sidebar {
   float: left;
-  width: 200px;
+  width: 320px;
   min-height: 200px;
   padding: 20px;
 }
 
 .content-main {
-  float: left;
-  width: 620px;
+  width: 827px;
   min-height: 200px;
-  padding: 20px;
+  padding-right: 80px;
+  padding-bottom: 20px;
+
 }
 
 /* Footer */
@@ -120,10 +124,12 @@ body {
 }
 
 .footer-nav {
-  width: 900px;
+  width: 1200px;
   margin: 0px auto;
   background-color: white;
   border: 1px solid #CCC;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .footer-nav-copyright {
@@ -147,13 +153,24 @@ body {
 
 /* Sidebar */
 
-.profile-picture {
+.avatar-container {
   display: block;
   margin-top: 0px;
   border: 1px solid #000;
-  background: #000;
+  background: white;
   border-radius: 5px;
   position: relative;
+  transition: .1s;
+  width: 200px;
+  height: 200px;
+}
+
+.avatar-container img {
+  position: absolute;
+}
+
+.profile-picture:hover {
+  transform: scale(1.03);
 }
 
 .profile-info {
@@ -178,6 +195,7 @@ body {
   display: block;
   padding: 5px;
   font-weight: 700;
+  width: 60%;
 }
 
 .profile-nav > li:first-child {
@@ -217,19 +235,34 @@ body {
 .expbar
 {
   background-color: yellow;
-  width: 37%;
   height: 100%;
   border-radius: 9px;
+}
+
+.exp-empty .tag {
+  display: none;
+  position: absolute;
+  background-color: white;
+  padding: 5px;
+  margin: -50px auto 0px auto;
+  border-radius: 5px;
+  box-shadow: 3px 3px 10px rgba(0,0,0,.5);
+}
+
+.exp-empty:hover .tag {
+  display: block;
 }
 
 /* Main - Card */
 #card {
   margin: 0px auto;
-  display: block;
+  background-image: url(http://orig15.deviantart.net/3615/f/2011/162/5/d/pokemon_tcg_water_texture_rip_by_ilkcmp-d3inhf4.png);
+  display: flex;
+  flex-direction: column;
 	width: 300px;
 	height: 500px;
-  border: 1px solid black;
-  background-color: rgba(192,192,192,.3);
+  border: 10px solid black;
+  background-color: purple;
   border-radius: 10px;
   padding: 10px;
 }
@@ -237,21 +270,61 @@ body {
 #goal-title {
   text-align: center;
   display: block;
-  margin: 5px auto;
+  margin: auto;
+  border: 1px solid red;
   font-size: 24px;
+  border-radius: 10px;
+  background-color: blue;
+  width: 98%;
+  padding: 3px;
+}
+
+#goal-picture {
+  background-color: green;
+  padding: 10px;
+  display: block;
+  margin: auto;
+  width: 90%;
+  height: 20%
 }
 
 #goal-add {
-  float: right;
+  background-color: yellow;
+  padding: 10px;
   display: block;
-  margin: 5px 5px 3px 0px;
+  margin: auto;
+  width: 95%;
+  border-radius: 10px;
 }
 
 #goals {
-  margin: 25px auto;
+  margin: 0px auto;
   overflow: auto;
   width: 97%;
   height: 75%;
+  border: 1px solid blue;
+  background-color: pink;
+}
+
+#goals::-webkit-scrollbar {
+    width: 0px;
+}
+
+#goal-li {
+  margin: auto;
+}
+
+#hidden_button {
+  display: none;
+}
+
+.goal-element {
+  transition: .3s;
+}
+
+.goal-element:hover #hidden_button {
+  display: inline-block;
+  transform: scale(1.1);
 }
 
 /* Forms */
@@ -275,4 +348,95 @@ input[type=text], select {
     border-radius: 4px;
     box-sizing: border-box;
     background-color: white;
+}
+
+/* Shop */
+
+.shop-header {
+  margin: 0 50%;
+  width: 200px;
+  height: 200px;
+  position: relative;
+  background-image: url("http://i64.tinypic.com/24mxlko.png");
+  background-repeat: no-repeat;
+  background-size: 200px auto;
+}
+
+.shop-header img {
+  position: relative;
+  height: 200px;
+  width: auto;
+}
+
+.shop-header h2 {
+  position: absolute;
+  z-index: 100;
+  top: 55%;
+  right: 25%;
+  font-weight: 700;
+  font-size: 50px;
+}
+
+.shop-list {
+  margin: 20px 27%;
+  position: relative;
+  padding: 0 0 0 50px;
+  display: block;
+  width: 65%;
+  height: 600px;
+  background-color: green;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 10px;
+}
+
+.shop-list::-webkit-scrollbar {
+  width: 0px;
+}
+
+.shop-list .item {
+  float: left;
+  display: block;
+  margin: 20px 30px;
+  height: 200px;
+  width: 155px;
+  padding: 10px;
+  background-color: blue;
+  border: 5px solid black;
+  transition: .3s;
+  border-radius: 10px;
+}
+
+.shop-list .item:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+
+.shop-list .item picture {
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  height: 125px;
+  width: 125px;
+  background-color: white;
+  border: 5px solid black;
+}
+
+.shop-list .item .container {
+  margin: 15% 37%;
+}
+
+.shop-list .item tag {
+  display: none;
+  position: absolute;
+  background-color: white;
+  padding: 5px;
+  margin: -50px auto 0px auto;
+  border-radius: 5px;
+  box-shadow: 3px 3px 10px rgba(0,0,0,.5);
+}
+
+.shop-list .item:hover tag {
+  display: block;
 }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229205115) do
+ActiveRecord::Schema.define(version: 20160303200246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,12 +29,38 @@ ActiveRecord::Schema.define(version: 20160229205115) do
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
 
+  create_table "items", force: :cascade do |t|
+    t.string   "name",                    null: false
+    t.text     "description",             null: false
+    t.integer  "price",       default: 0
+    t.integer  "hp_value",    default: 0
+    t.integer  "atk_value",   default: 0
+    t.integer  "def_value",   default: 0
+    t.string   "item_type",               null: false
+    t.string   "picture_url"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "ownerships", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "item_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "ownerships", ["item_id"], name: "index_ownerships_on_item_id", using: :btree
+  add_index "ownerships", ["user_id"], name: "index_ownerships_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
-    t.string   "username",        null: false
-    t.string   "password_digest", null: false
-    t.string   "session_token",   null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string   "username",                      null: false
+    t.string   "password_digest",               null: false
+    t.string   "session_token",                 null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "level",           default: 1,   null: false
+    t.integer  "exp",             default: 0,   null: false
+    t.integer  "gold",            default: 100, null: false
   end
 
 end

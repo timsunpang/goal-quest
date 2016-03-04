@@ -9,6 +9,11 @@ var MainContent = React.createClass({
 
   mixins: [LinkedStateMixin],
 
+  childContextTypes: {
+    user: React.PropTypes.object,
+    completedGoalCount: React.PropTypes.object
+  },
+
   getInitialState: function() {
     return {
       adding: false,
@@ -21,7 +26,8 @@ var MainContent = React.createClass({
     this.setState({adding: !this.state.adding});
   },
 
-  confirmChanges: function(){
+  confirmChanges: function(e){
+    e.preventDefault();
     ApiUtil.newGoal({title: this.state.title, description: this.state.description})
     this.setState({adding: false})
   },
@@ -35,7 +41,7 @@ var MainContent = React.createClass({
             Goals
             <p>
               <button className="button remove icon" onClick={this.toggleAdding}> Cancel </button>
-              <input type="submit" value="Add" form="addform" className= "button add icon"/>
+              <input type="submit" value="Add" form="addform" className= "button add icon" id="add_button"/>
             </p>
           </div>
           <div>
@@ -55,20 +61,25 @@ var MainContent = React.createClass({
             </form>
           </div>
           <div id="goals">
-            <GoalList />
+            <GoalList user={this.props.user} completedGoalCount={this.props.completedGoalCount}/>
           </div>
         </div>
       </main>
     )} else {
       return (
         <main className="content-main">
-          <div id="card">
+          <div id="card" className="animated flipInY">
             <div id="goal-title">
               Goals
+            </div>
+            <div id="goal-picture">
+              picture
+            </div>
+            <div id="goal-add">
               <p><button className="button add icon" onClick={this.toggleAdding}> Add </button></p>
             </div>
             <div id="goals">
-              <GoalList />
+              <GoalList user={this.props.user} completedGoalCount={this.props.completedGoalCount}/>
               </div>
             </div>
         </main>

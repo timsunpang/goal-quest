@@ -8,16 +8,23 @@
 #  session_token   :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  level           :integer          default(1), not null
+#  exp             :integer          default(0), not null
+#  gold            :integer          default(100), not null
 #
 
 class User < ActiveRecord::Base
   attr_reader :password
-  validates :username, :password_digest, :session_token, presence: true
+  validates :username, :password_digest, :session_token, :level, :exp, presence: true
+  validates :gold, :numericality => {:greater_than_or_equal_to => 0}
   validates :username, uniqueness: true
   validates :password, length: {minimum: 6, allow_nil: true}
   after_initialize :ensure_session_token
 
   has_many :goals
+  has_many :ownerships
+  has_many :items,
+  through: :ownerships
 
   def password=(password)
     @password = password
