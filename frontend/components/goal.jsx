@@ -75,12 +75,14 @@ var Goal = React.createClass({
       )
     } else {
       return (
-        <div className="goal-element">
+        <div className="goal-element-gradient">
+          <div className="goal-element">
           {this.props.goal.title}
           <div>
             <button id="hidden_button" className= 'button icon trash' onClick={this.handleDestroy}/>
             <button id="hidden_button" className= 'button icon edit' onClick={this.handleEdit}/>
             <button id="hidden_button" className= "button icon approve" onClick={this.handleComplete}/>
+          </div>
           </div>
         </div>
       )

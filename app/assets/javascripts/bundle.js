@@ -32514,62 +32514,74 @@
 	        { className: 'content-main' },
 	        React.createElement(
 	          'div',
-	          { id: 'card' },
+	          { id: 'card-container' },
 	          React.createElement(
 	            'div',
-	            { id: 'goal-title' },
-	            'Goals',
+	            { id: 'card' },
 	            React.createElement(
-	              'p',
-	              null,
+	              'div',
+	              { id: 'goal-title-gradient' },
 	              React.createElement(
-	                'button',
-	                { className: 'button remove icon', onClick: this.toggleAdding },
-	                ' Cancel '
-	              ),
-	              React.createElement('input', { type: 'submit', value: 'Add', form: 'addform', className: 'button add icon', id: 'add_button' })
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	              'form',
-	              { onSubmit: this.confirmChanges },
-	              React.createElement(
-	                'p',
-	                null,
+	                'div',
+	                { id: 'goal-title' },
+	                'Goals',
 	                React.createElement(
-	                  'label',
-	                  { htmlFor: 'add_title' },
-	                  'Title'
-	                ),
-	                React.createElement('input', { type: 'text', id: 'add_title', valueLink: this.linkState("title") })
+	                  'p',
+	                  null,
+	                  React.createElement(
+	                    'button',
+	                    { className: 'button remove icon', onClick: this.toggleAdding },
+	                    ' Cancel '
+	                  ),
+	                  React.createElement('input', { type: 'submit', value: 'Add', form: 'addform', className: 'button add icon', id: 'add_button' })
+	                )
 	              )
 	            ),
 	            React.createElement(
-	              'form',
-	              { id: 'addform', onSubmit: this.confirmChanges },
+	              'div',
+	              null,
 	              React.createElement(
-	                'p',
-	                null,
+	                'form',
+	                { onSubmit: this.confirmChanges },
 	                React.createElement(
-	                  'label',
-	                  { htmlFor: 'add_description' },
-	                  'Description'
+	                  'p',
+	                  null,
+	                  React.createElement(
+	                    'label',
+	                    { htmlFor: 'add_title' },
+	                    'Title'
+	                  ),
+	                  React.createElement('input', { type: 'text', id: 'add_title', valueLink: this.linkState("title") })
 	                )
 	              ),
 	              React.createElement(
-	                'p',
-	                null,
-	                React.createElement('textarea', { id: 'add_description', className: 'styled_form', valueLink: this.linkState("description") })
+	                'form',
+	                { id: 'addform', onSubmit: this.confirmChanges },
+	                React.createElement(
+	                  'p',
+	                  null,
+	                  React.createElement(
+	                    'label',
+	                    { htmlFor: 'add_description' },
+	                    'Description'
+	                  )
+	                ),
+	                React.createElement(
+	                  'p',
+	                  null,
+	                  React.createElement('textarea', { id: 'add_description', className: 'styled_form', valueLink: this.linkState("description") })
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { id: 'goals-gradient' },
+	              React.createElement(
+	                'div',
+	                { id: 'goals' },
+	                React.createElement(GoalList, { user: this.props.user, completedGoalCount: this.props.completedGoalCount })
 	              )
 	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { id: 'goals' },
-	            React.createElement(GoalList, { user: this.props.user, completedGoalCount: this.props.completedGoalCount })
 	          )
 	        )
 	      );
@@ -32579,34 +32591,54 @@
 	        { className: 'content-main' },
 	        React.createElement(
 	          'div',
-	          { id: 'card', className: 'animated flipInY' },
+	          { id: 'card-container' },
 	          React.createElement(
 	            'div',
-	            { id: 'goal-title' },
-	            'Goals'
-	          ),
-	          React.createElement(
-	            'div',
-	            { id: 'goal-picture' },
-	            'picture'
-	          ),
-	          React.createElement(
-	            'div',
-	            { id: 'goal-add' },
+	            { id: 'card', className: 'animated flipInY' },
 	            React.createElement(
-	              'p',
-	              null,
+	              'div',
+	              { id: 'goal-title-gradient' },
 	              React.createElement(
-	                'button',
-	                { className: 'button add icon', onClick: this.toggleAdding },
-	                ' Add '
+	                'div',
+	                { id: 'goal-title' },
+	                'Goals'
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { id: 'goal-picture-gradient' },
+	              React.createElement('div', { id: 'goal-picture' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { id: 'goal-add-gradient' },
+	              React.createElement(
+	                'div',
+	                { id: 'goal-add' },
+	                React.createElement(
+	                  'center',
+	                  null,
+	                  React.createElement(
+	                    'p',
+	                    null,
+	                    React.createElement(
+	                      'button',
+	                      { id: 'goal-button', className: 'button add icon', onClick: this.toggleAdding },
+	                      ' Add '
+	                    )
+	                  )
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { id: 'goals-gradient' },
+	              React.createElement(
+	                'div',
+	                { id: 'goals' },
+	                React.createElement(GoalList, { user: this.props.user, completedGoalCount: this.props.completedGoalCount })
 	              )
 	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { id: 'goals' },
-	            React.createElement(GoalList, { user: this.props.user, completedGoalCount: this.props.completedGoalCount })
 	          )
 	        )
 	      );
@@ -32775,14 +32807,18 @@
 	    } else {
 	      return React.createElement(
 	        'div',
-	        { className: 'goal-element' },
-	        this.props.goal.title,
+	        { className: 'goal-element-gradient' },
 	        React.createElement(
 	          'div',
-	          null,
-	          React.createElement('button', { id: 'hidden_button', className: 'button icon trash', onClick: this.handleDestroy }),
-	          React.createElement('button', { id: 'hidden_button', className: 'button icon edit', onClick: this.handleEdit }),
-	          React.createElement('button', { id: 'hidden_button', className: 'button icon approve', onClick: this.handleComplete })
+	          { className: 'goal-element' },
+	          this.props.goal.title,
+	          React.createElement(
+	            'div',
+	            null,
+	            React.createElement('button', { id: 'hidden_button', className: 'button icon trash', onClick: this.handleDestroy }),
+	            React.createElement('button', { id: 'hidden_button', className: 'button icon edit', onClick: this.handleEdit }),
+	            React.createElement('button', { id: 'hidden_button', className: 'button icon approve', onClick: this.handleComplete })
+	          )
 	        )
 	      );
 	    }

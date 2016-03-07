@@ -67,51 +67,66 @@ var MainContent = React.createClass({
     if (this.state.adding) {
       return (
         <main className="content-main">
-        <div id="card">
-          <div id="goal-title">
-            Goals
-            <p>
-              <button className="button remove icon" onClick={this.toggleAdding}> Cancel </button>
-              <input type="submit" value="Add" form="addform" className= "button add icon" id="add_button"/>
-            </p>
-          </div>
-          <div>
-            <form onSubmit={this.confirmChanges}>
-              <p>
-                <label htmlFor="add_title">Title</label>
-                <input type= "text" id="add_title" valueLink={this.linkState("title")}></input>
-              </p>
-            </form>
-            <form id="addform" onSubmit={this.confirmChanges}>
-              <p>
-                <label htmlFor="add_description">Description</label>
-              </p>
-              <p>
-                <textarea id="add_description" className="styled_form" valueLink={this.linkState("description")}></textarea>
-              </p>
-            </form>
-          </div>
-          <div id="goals">
-            <GoalList user={this.props.user} completedGoalCount={this.props.completedGoalCount}/>
+        <div id="card-container">
+          <div id="card">
+            <div id="goal-title-gradient">
+              <div id="goal-title">
+                Goals
+                <p>
+                  <button className="button remove icon" onClick={this.toggleAdding}> Cancel </button>
+                  <input type="submit" value="Add" form="addform" className= "button add icon" id="add_button"/>
+                </p>
+              </div>
+            </div>
+            <div>
+              <form onSubmit={this.confirmChanges}>
+                <p>
+                  <label htmlFor="add_title">Title</label>
+                  <input type= "text" id="add_title" valueLink={this.linkState("title")}></input>
+                </p>
+              </form>
+              <form id="addform" onSubmit={this.confirmChanges}>
+                <p>
+                  <label htmlFor="add_description">Description</label>
+                </p>
+                <p>
+                  <textarea id="add_description" className="styled_form" valueLink={this.linkState("description")}></textarea>
+                </p>
+              </form>
+            </div>
+            <div id="goals-gradient">
+              <div id="goals">
+                <GoalList user={this.props.user} completedGoalCount={this.props.completedGoalCount}/>
+              </div>
+            </div>
           </div>
         </div>
       </main>
     )} else {
       return (
         <main className="content-main">
-          <div id="card" className="animated flipInY">
-            <div id="goal-title">
-              Goals
-            </div>
-            <div id="goal-picture">
-              picture
-            </div>
-            <div id="goal-add">
-              <p><button className="button add icon" onClick={this.toggleAdding}> Add </button></p>
-            </div>
-            <div id="goals">
-              <GoalList user={this.props.user} completedGoalCount={this.props.completedGoalCount}/>
+          <div id= "card-container">
+            <div id="card" className="animated flipInY">
+              <div id="goal-title-gradient">
+                <div id="goal-title">
+                  Goals
+                </div>
               </div>
+              <div id="goal-picture-gradient">
+                <div id="goal-picture">
+                </div>
+              </div>
+              <div id="goal-add-gradient">
+                <div id="goal-add">
+                  <center><p><button id="goal-button" className="button add icon" onClick={this.toggleAdding}> Add </button></p></center>
+                </div>
+              </div>
+              <div id="goals-gradient">
+                <div id="goals">
+                  <GoalList user={this.props.user} completedGoalCount={this.props.completedGoalCount}/>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       )};
