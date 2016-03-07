@@ -13,6 +13,8 @@
 #  picture_url :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  special     :integer          default(0), not null
+#  armor_type  :string
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

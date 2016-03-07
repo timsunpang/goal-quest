@@ -27,8 +27,11 @@
     "bootstrap": "^3.3.6",
     "flux": "^2.1.1",
     "react": "^0.14.7",
+    "react-addons-css-transition-group": "^0.14.7",
     "react-addons-linked-state-mixin": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-notification": "^4.2.0",
+    "react-notifications": "^0.2.0",
     "react-router": "^2.0.0",
     "webpack": "^1.12.14"
   },
@@ -36,5 +39,8 @@
     "node": "4.1.1",
     "npm": "2.1.x"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.0"
+  }
 }

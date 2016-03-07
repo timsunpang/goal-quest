@@ -12,10 +12,9 @@ class Api::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:notice] = ["User created!"]
+      sign_in(@user)
       redirect_to root_url
     else
-      flash[:error] = @user.errors.full_messages
       redirect_to new_api_user_url
     end
   end
@@ -33,6 +32,6 @@ class Api::UsersController < ApplicationController
 
   private
   def user_params
-    params.require(:user).permit(:username, :password, :level, :exp, :gold, :session_token)
+    params.require(:user).permit(:username, :password, :level, :exp, :gold, :face_id, :head_id, :body_id, :legs_id, :weapon_id, :shield_id, :session_token)
   end
 end

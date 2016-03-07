@@ -9,14 +9,14 @@ class Api::OwnershipsController < ApplicationController
     new_params["user_id"] = current_user.id
     @ownership = Ownership.new(new_params)
     if Ownership.create!(new_params)
-      redirect_to :index
+      redirect_to api_ownerships_url
     else
       render json: @ownership.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @ownership = Ownership.find_by_id(params[:id])
+    @ownership = Ownership.find_by_credentials(current_user.id, params[:id])
     Ownership.destroy(params[:id])
     render json: @ownership
   end

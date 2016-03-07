@@ -40,10 +40,6 @@ GoalStore.create = function(todo) {
 GoalStore.destroy = function(id) {
   if (_goals[id]){
     delete _goals[id];
-    GoalStore.__emitChange();
-    console.log("success")
-  } else {
-    console.log("error")
   }
 };
 
@@ -60,7 +56,6 @@ GoalStore.__onDispatch = function (payload) {
   case GoalConstants.GOAL_RECEIVED:
     addGoal(payload.goal)
     GoalStore.__emitChange();
-    console.log("Goal Updated!")
     break;
   case GoalConstants.GOAL_DELETED:
     GoalStore.destroy(payload.id);

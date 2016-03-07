@@ -1,0 +1,47 @@
+User
+-	face, head, body, legs, weapon, shield
+Item
+-	id which the User can retrieve
+
+
+[X] 1. Get user from this.state.user
+[X] 2. Access user's equipped items
+[X] 3. Send equipped items IDs to the ItemStore
+  - As a callback?
+[X] 4. Shop will return equipped items to the sidebar
+[X] 5. Use equipped items to update images
+
+[X] Fix links
+[ ] Fix create user
+[ ] Splash page
+[ ] Notifications bar
+[ ] HP
+[ ] Buying items
+[ ] Tour
+
+How to update the equipped items
+- Each item, in addition to having a type as armor, needs an armor type
+- When you click on an item in the equipment page, it will
+  update the user for that particular item's armor type with the
+  armor's ID
+
+item - onClick = {handleEquipmentClick}
+
+handleEquipmentClick:
+  - if item is armor
+    - User is not currently wearing armor
+      - ApiUtil.changeArmor({item.armor_type: item.id})
+      - ApiUtil makes PATCH request to User
+    - User is wearing armor
+      - ApiUtil.changeArmor({item.armor_type: defaults}) via PATCH
+  - else
+    - nothing for now
+    - (add HP value to HP)
+
+
+Problem - we have no easy way of seeing if the user is wearing the item or not, from the
+item's perspective
+
+Additionally - we need to find a way to change the user's equipped items, although
+the user's item column is called head_id, body_id, etc. while our item's armor_type
+is called head, body, etc.

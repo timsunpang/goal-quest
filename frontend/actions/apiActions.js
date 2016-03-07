@@ -18,6 +18,20 @@ module.exports = {
     });
   },
 
+  removeItem: function (id) {
+    Dispatcher.dispatch({
+      actionType: ItemConstants.ITEM_DELETED,
+      id: id
+    });
+  },
+
+  receiveAllEquipment: function (items) {
+    Dispatcher.dispatch({
+      actionType: ItemConstants.EQUIPMENT_RECEIVED,
+      items: items
+    });
+  },
+
   receiveUser: function(user){
     Dispatcher.dispatch({
       actionType: UserConstants.USER_RECEIVED,
@@ -36,6 +50,20 @@ module.exports = {
     Dispatcher.dispatch({
       actionType: GoalConstants.GOAL_RECEIVED,
       goal: goal
+    })
+  },
+
+  addNotification: function(notification) {
+    Dispatcher.dispatch({
+      actionType: 'NOTIFICATION_RECEIVED',
+      notification: notification
+    })
+  },
+
+  addNotifications: function(notification) {
+    Dispatcher.dispatch({
+      actionType: 'NOTIFICATIONS_RECEIVED',
+      notification: notification
     })
   }
 }

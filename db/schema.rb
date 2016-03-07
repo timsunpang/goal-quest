@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303200246) do
+ActiveRecord::Schema.define(version: 20160304175205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20160303200246) do
     t.string   "picture_url"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "special",     default: 0, null: false
+    t.string   "armor_type"
   end
 
   create_table "ownerships", force: :cascade do |t|
@@ -61,6 +63,12 @@ ActiveRecord::Schema.define(version: 20160303200246) do
     t.integer  "level",           default: 1,   null: false
     t.integer  "exp",             default: 0,   null: false
     t.integer  "gold",            default: 100, null: false
+    t.integer  "face_id",         default: 100, null: false
+    t.integer  "head_id",         default: 101, null: false
+    t.integer  "body_id",         default: 102, null: false
+    t.integer  "legs_id",         default: 103, null: false
+    t.integer  "weapon_id",       default: 104, null: false
+    t.integer  "shield_id",       default: 105, null: false
   end
 
 end

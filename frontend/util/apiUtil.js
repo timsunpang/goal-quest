@@ -83,6 +83,47 @@ var ApiUtil = {
     })
   },
 
+  fetchAllEquipment: function() {
+    $.ajax({
+      url: "api/items",
+      success: function (items) {
+        ApiActions.receiveAllEquipment(items);
+      }
+    })
+  },
+
+  changeArmor: function(user_id, equipped_item) {
+    $.ajax({
+      url: "api/users/" + user_id,
+      method: "patch",
+      data: { user: equipped_item },
+      success: function (user) {
+        ApiActions.receiveUser(user);
+      }
+    })
+  },
+
+  useItem: function(item_id) {
+    $.ajax({
+      url: "api/ownerships/" + item_id,
+      method: "delete",
+      success: function () {
+        ApiActions.removeItem(item_id);
+      }
+    })
+  },
+
+  purchaseNewItem: function(item_id){
+    $.ajax({
+      url: "api/ownerships/",
+      method: "post",
+      data: { ownership: {item_id: item_id} },
+      success: function () {
+        console.log("Bought item!")
+      }
+    })
+  },
+
   logout: function() {
     $.ajax({
       url: "/session",

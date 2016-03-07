@@ -3,23 +3,54 @@ var React = require('react'),
     GoalList = require('./GoalList.jsx'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
     GoalStore = require('../stores/GoalStore.jsx'),
-    ApiUtil = require('../util/apiUtil.js');
+    NotificationStore = require('../stores/NotificationStore.jsx'),
+    ApiUtil = require('../util/apiUtil.js'),
+    ApiActions = require('../actions/apiActions.js');
 
 var MainContent = React.createClass({
 
   mixins: [LinkedStateMixin],
 
-  childContextTypes: {
+  contextTypes: {
     user: React.PropTypes.object,
-    completedGoalCount: React.PropTypes.object
+    completedGoalCount: React.PropTypes.number,
   },
 
   getInitialState: function() {
     return {
       adding: false,
       title: '',
-      description: ''
+      description: '',
+      notification_id: 1
     };
+  },
+
+  _onChangeNotification: function(){
+    if (NotificationStore.lastId() >= 1)
+      this.setState({notification_id: NotificationStore.lastId() + 1})
+    else {
+      this.setState({notification_id: 1})
+    }
+  },
+
+  componentDidMount: function(){
+    this.notificationListener = NotificationStore.addListener(this._onChangeNotification);
+  },
+
+  componentWillUnmount: function(){
+    this.notificationListener.remove();
+  },
+
+  addNotification: function(message) {
+    var id = this.state.notification_id;
+
+    var notification = {
+      id: id,
+      title: "Notification:",
+      message: message
+    };
+
+    ApiActions.addNotification(notification);
   },
 
   toggleAdding: function() {
@@ -29,7 +60,7 @@ var MainContent = React.createClass({
   confirmChanges: function(e){
     e.preventDefault();
     ApiUtil.newGoal({title: this.state.title, description: this.state.description})
-    this.setState({adding: false})
+    this.setState({adding: false});
   },
 
   render: function() {
@@ -81,7 +112,7 @@ var MainContent = React.createClass({
             <div id="goals">
               <GoalList user={this.props.user} completedGoalCount={this.props.completedGoalCount}/>
               </div>
-            </div>
+          </div>
         </main>
       )};
     }
