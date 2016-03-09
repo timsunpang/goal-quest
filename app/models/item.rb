@@ -24,7 +24,7 @@ class Item < ActiveRecord::Base
   validates :atk_value, :numericality => {:greater_than_or_equal_to => 0}
   validates :def_value, :numericality => {:greater_than_or_equal_to => 0}
   validates :item_type, inclusion: {in: ['consummable', 'armor']}
-  validates :armor_type, inclusion: {in: ['face', 'head', 'body', 'legs', 'weapon', 'shield']}
+  validates :armor_type, inclusion: {in: ['face', 'head', 'body', 'legs', 'weapon', 'shield']}, allow_nil: true
 
   has_many :ownerships
 
