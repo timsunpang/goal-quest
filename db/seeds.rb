@@ -8,7 +8,7 @@
 
 
 Item.create(
-  name: "Potion"
+  name: "Potion",
   id: 1,
   name: "Potion",
   description: "A simple concoction. Heals 10 HP.",
