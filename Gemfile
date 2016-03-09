@@ -37,6 +37,7 @@ gem 'bcrypt'
 # gem 'capistrano-rails', group: :development
 group :development do
   gem "better_errors"
+  gem 'newrelic_rpm'
 end
 
 group :development, :test do

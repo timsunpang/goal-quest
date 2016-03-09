@@ -36,8 +36,8 @@
     "webpack": "^1.12.14"
   },
   "engines": {
-    "node": "4.1.1",
-    "npm": "2.1.x"
+    "node": "4.2.1",
+    "npm": "2.14.7"
   },
   "devDependencies": {
     "css-loader": "^0.23.1",
