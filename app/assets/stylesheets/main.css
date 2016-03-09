@@ -10,7 +10,7 @@
 .logo {
   width: 300px;
   height: 300px;
-  background-image: url("./../assets/gq_logo.png");
+  background-image: url("http://res.cloudinary.com/ladh6sfp9/image/upload/v1457479064/GoalQuest/gq_logo.png");
   background-size: 80%;
   background-repeat: no-repeat;
   background-position: 50%;
@@ -327,7 +327,7 @@
 
 #card {
   margin: 0px auto;
-  background-image: url(http://orig15.deviantart.net/3615/f/2011/162/5/d/pokemon_tcg_water_texture_rip_by_ilkcmp-d3inhf4.png);
+  background-image: url("http://res.cloudinary.com/ladh6sfp9/image/upload/v1457508860/GoalQuest/pokemon_tcg_water_texture_rip_by_ilkcmp-d3inhf4.png");
   display: flex;
   flex-direction: column;
 	width: 300px;
@@ -384,7 +384,7 @@
 
 #goal-picture {
   background-color: white;
-  background-image: url("http://www.giraffecvs.co.uk/wp-content/uploads/2013/09/target.png");
+  background-image: url("http://res.cloudinary.com/ladh6sfp9/image/upload/v1457508918/GoalQuest/target.png");
   background-size: 45%;
   background-repeat: no-repeat;
   background-position-x: 41%;
@@ -643,7 +643,7 @@ input[type=text], select {
   width: 200px;
   height: 200px;
   position: relative;
-  background-image: url("https://openclipart.org/image/2400px/svg_to_png/1933/johnny-automatic-leather-pouch.png");
+  background-image: url("http://res.cloudinary.com/ladh6sfp9/image/upload/v1457509060/GoalQuest/johnny-automatic-leather-pouch.png");
   background-repeat: no-repeat;
   background-size: 80% auto;
 }
