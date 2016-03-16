@@ -33,6 +33,7 @@
     "react-notification": "^4.2.0",
     "react-notifications": "^0.2.0",
     "react-router": "^2.0.0",
+    "tether-shepherd": "^1.7.0",
     "webpack": "^1.12.14"
   },
   "engines": {

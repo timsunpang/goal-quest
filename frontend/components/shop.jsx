@@ -40,12 +40,15 @@ var Shop = React.createClass({
   },
 
   handlePurchase: function(item) {
-    if (this.context.user.gold < item.price) {
-      this.addNotification("Error", "Not enough gold")
-    } else {
-      this.addNotification(item.name + " purchased", "")
-      ApiUtil.updateCurrentUser(this.context.user.id, {gold: this.context.user.gold - item.price})
-      ApiUtil.purchaseNewItem(item.id)
+    if (confirm("Buy " + item.name + " for " + item.price + " gold?")){
+      if (this.context.user.gold < item.price) {
+        this.addNotification("Error", "Not enough gold")
+      } else {
+        this.addNotification(item.name + " purchased", "");
+        ApiUtil.updateCurrentUser(this.context.user.id, {gold: this.context.user.gold - item.price});
+        ApiUtil.purchaseNewItem(item.id);
+        ApiUtil.fetchAllItems();
+      };
     };
   },
 

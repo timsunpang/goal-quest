@@ -119,7 +119,6 @@ var ApiUtil = {
       method: "post",
       data: { ownership: {item_id: item_id} },
       success: function () {
-        console.log("Bought item!")
       }
     })
   },

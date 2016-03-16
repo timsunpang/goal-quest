@@ -16,6 +16,7 @@ var React = require('react'),
     GoalStore = require('./stores/GoalStore'),
     UserStore = require('./stores/UserStore'),
     NotificationStore = require('./stores/NotificationStore'),
+    Shepherd = require('tether-shepherd'),
     Notifications = require('react-notifications');
 
 
@@ -25,7 +26,8 @@ var App = React.createClass({
       completedGoalCount: GoalStore.allCompleted().length,
       user: UserStore.retrieve(),
       notifications: [],
-      notification_id: 1
+      notification_id: 1,
+      tour: false
     };
   },
 
@@ -41,7 +43,11 @@ var App = React.createClass({
   },
 
   _onChangeUser: function(){
-    this.setState({user: UserStore.retrieve()})
+    this.setState({user: UserStore.retrieve()});
+    if (this.state.tour === false) {
+      this.giveTour();
+      this.setState({tour: true})
+    }
   },
 
   _onChangeNotification: function(){
@@ -88,6 +94,253 @@ var App = React.createClass({
       notification_id: this.state.notification_id
     }
   },
+
+  giveTour: function () {
+    var tour = new Shepherd.Tour({
+      defaults: {
+        classes: 'shepherd-theme-default',
+        showCancelLink: true
+      }
+    });
+
+    tour.addStep('introduction-step', {
+      title: 'Welcome!',
+      text: 'Welcome to GoalQuest!<br/>' +
+            "Let's begin with a tour!",
+      attachTo: '#card-container top',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-2', {
+      title: 'Welcome!',
+      text: 'GoalQuest is a game where<br/>' +
+            'you can track your goals in real life<br/>' +
+            'in a fun, interactive way!',
+      attachTo: '#card-container top',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-3', {
+      title: 'Avatar',
+      text: 'This is your avatar. You can change the way<br/>' +
+            'your avatar looks by buying more items in the shop!<br/>',
+      attachTo: '.avatar-container right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-4', {
+      title: 'Sidebar',
+      text: 'This displays your current level, gold, and goals completed.<br/>',
+      attachTo: '.profile-info h2 right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-5', {
+      title: 'HP',
+      text: 'This shows your current HP. Be sure to complete<br/>' +
+            'goals within 24 hours, or your HP will be reduced!',
+      attachTo: '.hp-empty right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-6', {
+      title: 'EXP',
+      text: 'This shows your current EXP. As you complete<br/>' +
+            'goals, this bar will fill up, and when it is completely <br/>' +
+            'full, you will level up!',
+      attachTo: '.exp-empty right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-7', {
+      title: 'Goals',
+      text: 'These are your goals. You can create, edit, or complete <br/>' +
+            'goals. Every time you complete a gold, you gain EXP and gold!',
+      attachTo: '#card right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-8', {
+      title: 'Goals',
+      text: 'What you define as your goals are completely up to you.<br/>' +
+            "Choose whatever you like, but don't cheat!",
+      attachTo: '#card right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-9', {
+      title: 'Navigation',
+      text: 'This is your navigation bar.<br/>' +
+            "Click on Shop to continue!",
+      attachTo: '.header-list bottom',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-10', {
+      title: 'Shop',
+      text: 'This is the shop. Listed are different<br/>' +
+            "items, along with their prices.",
+      attachTo: '.shop-list right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-11', {
+      title: 'Shop',
+      text: 'Click on an item to buy it, or hover<br/>' +
+            "over it to see a description.",
+      attachTo: '.shop-list right',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep('step-12', {
+      title: 'Equipment',
+      text: 'Click on Equipment to continue!',
+      attachTo: '.header-list bottom',
+      when: {
+        show: function () {
+          window.scrollTo(0, 0);
+        }
+      },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+  tour.addStep('step-13', {
+    title: 'Equipment',
+    text: 'This is your equipment page. <br/>' +
+    'You can equip or consume any item you bought <br/>' +
+    'by clicking on the item. You can also unequip by <br/>' +
+    'clicking on something that you already equipped',
+    attachTo: '.equipment-header right',
+    when: {
+      show: function () {
+        window.scrollTo(0, 0);
+      }
+    },
+    buttons: [
+      {
+        text: 'Next',
+        action: tour.next
+      }
+    ]
+  });
+
+  tour.start();
+},
 
   render: function(){
     return (

@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def new
+    sign_out(current_user) if current_user
     @user = User.new
     render :new
   end
