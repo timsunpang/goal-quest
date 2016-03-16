@@ -77,7 +77,7 @@ var Shop = React.createClass({
         </div>
       )
     })
-
+    
     return (
     <div className="shop-container">
       <div className="shop-header animated flipInX">
