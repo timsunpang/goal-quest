@@ -93,7 +93,7 @@
 	
 	  _onChangeUser: function () {
 	    this.setState({ user: UserStore.retrieve() });
-	    if (this.state.tour === false) {
+	    if (this.state.tour === false && this.state.user.exp === 0) {
 	      this.giveTour();
 	      this.setState({ tour: true });
 	    }
@@ -150,6 +150,8 @@
 	      }
 	    });
 	
+	    var next = tour.next.bind(tour);
+	
 	    tour.addStep('introduction-step', {
 	      title: 'Welcome!',
 	      text: 'Welcome to GoalQuest!<br/>' + "Let's begin with a tour!",
@@ -167,7 +169,7 @@
 	
 	    tour.addStep('step-2', {
 	      title: 'Welcome!',
-	      text: 'GoalQuest is a game where<br/>' + 'you can track your goals in real life<br/>' + 'in a fun, interactive way!',
+	      text: 'GoalQuest is a game where<br/>' + 'you can track your real life goals<br/>' + 'in a fun, interactive way!',
 	      attachTo: '#card-container top',
 	      when: {
 	        show: function () {
@@ -198,7 +200,7 @@
 	    tour.addStep('step-4', {
 	      title: 'Sidebar',
 	      text: 'This displays your current level, gold, and goals completed.<br/>',
-	      attachTo: '.profile-info h2 right',
+	      attachTo: '.profile-info h2 top',
 	      when: {
 	        show: function () {
 	          window.scrollTo(0, 0);
@@ -242,7 +244,7 @@
 	
 	    tour.addStep('step-7', {
 	      title: 'Goals',
-	      text: 'These are your goals. You can create, edit, or complete <br/>' + 'goals. Every time you complete a gold, you gain EXP and gold!',
+	      text: 'These are your goals. You can create, edit, or complete ' + 'goals. Every time you complete a gold, you gain EXP and gold!',
 	      attachTo: '#card right',
 	      when: {
 	        show: function () {
@@ -257,7 +259,7 @@
 	
 	    tour.addStep('step-8', {
 	      title: 'Goals',
-	      text: 'What you define as your goals are completely up to you.<br/>' + "Choose whatever you like, but don't cheat!",
+	      text: 'What you define as your goals are completely up to you. ' + "Choose whatever you like, but don't cheat!",
 	      attachTo: '#card right',
 	      when: {
 	        show: function () {
@@ -272,7 +274,7 @@
 	
 	    tour.addStep('step-9', {
 	      title: 'Navigation',
-	      text: 'This is your navigation bar.<br/>' + "Click on Shop to continue!",
+	      text: 'This is your navigation bar.<br/>' + "Click next to continue!",
 	      attachTo: '.header-list bottom',
 	      when: {
 	        show: function () {
@@ -281,7 +283,12 @@
 	      },
 	      buttons: [{
 	        text: 'Next',
-	        action: tour.next
+	        action: function () {
+	          hashHistory.push("/shop");
+	          setTimeout(function () {
+	            tour.next();
+	          }, 1000);
+	        }
 	      }]
 	    });
 	
@@ -317,8 +324,28 @@
 	
 	    tour.addStep('step-12', {
 	      title: 'Equipment',
-	      text: 'Click on Equipment to continue!',
+	      text: 'Now for equipment. Click next to continue!',
 	      attachTo: '.header-list bottom',
+	      when: {
+	        show: function () {
+	          window.scrollTo(0, 0);
+	        }
+	      },
+	      buttons: [{
+	        text: 'Next',
+	        action: function () {
+	          hashHistory.push("/equipment");
+	          setTimeout(function () {
+	            tour.next();
+	          }, 1000);
+	        }
+	      }]
+	    });
+	
+	    tour.addStep('step-13', {
+	      title: 'Equipment',
+	      text: 'This is your equipment page. <br/>' + 'You can equip or consume any item you bought <br/>' + 'by clicking on the item.',
+	      attachTo: '.equipment-header right',
 	      when: {
 	        show: function () {
 	          window.scrollTo(0, 0);
@@ -330,9 +357,9 @@
 	      }]
 	    });
 	
-	    tour.addStep('step-13', {
+	    tour.addStep('step-14', {
 	      title: 'Equipment',
-	      text: 'This is your equipment page. <br/>' + 'You can equip or consume any item you bought <br/>' + 'by clicking on the item. You can also unequip by <br/>' + 'clicking on something that you already equipped',
+	      text: 'You can also unequip by ' + 'clicking on something that you already equipped.',
 	      attachTo: '.equipment-header right',
 	      when: {
 	        show: function () {
@@ -342,6 +369,21 @@
 	      buttons: [{
 	        text: 'Next',
 	        action: tour.next
+	      }]
+	    });
+	
+	    tour.addStep('step-15', {
+	      title: 'End',
+	      text: "That's it for the tour! Have fun!",
+	      attachTo: '.equipment-header right',
+	      when: {
+	        show: function () {
+	          window.scrollTo(0, 0);
+	        }
+	      },
+	      buttons: [{
+	        text: 'End',
+	        action: tour.complete
 	      }]
 	    });
 	
@@ -376,7 +418,7 @@
 	document.addEventListener("DOMContentLoaded", function () {
 	  ReactDOM.render(React.createElement(
 	    Router,
-	    null,
+	    { history: hashHistory },
 	    routes
 	  ), document.getElementById("content"));
 	});
@@ -25063,6 +25105,15 @@
 	            null,
 	            React.createElement(
 	              'a',
+	              { onClick: this.handleHome, href: '#' },
+	              'Goals'
+	            )
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'a',
 	              { onClick: this.handleShop, href: '#' },
 	              'Shop'
 	            )
@@ -33682,27 +33733,38 @@
 	
 	  render: function () {
 	    var that = this;
-	    var items = this.state.items.map(function (item, i) {
-	      var boundItemClick = that.handleEquipmentClick.bind(that, item);
 	
-	      return React.createElement(
+	    if (this.state.items.length > 0) {
+	      var items = this.state.items.map(function (item, i) {
+	        var boundItemClick = that.handleEquipmentClick.bind(that, item);
+	
+	        return React.createElement(
+	          'div',
+	          { className: 'item', key: i, onClick: boundItemClick },
+	          React.createElement(
+	            'picture',
+	            null,
+	            React.createElement('img', { src: item.picture_url })
+	          ),
+	          React.createElement('br', null),
+	          item.name,
+	          React.createElement('br', null),
+	          React.createElement(
+	            'tag',
+	            null,
+	            item.description
+	          )
+	        );
+	      });
+	    } else {
+	      var items = React.createElement(
 	        'div',
-	        { className: 'item', key: i, onClick: boundItemClick },
-	        React.createElement(
-	          'picture',
-	          null,
-	          React.createElement('img', { src: item.picture_url })
-	        ),
+	        { className: 'empty-eqpmt' },
+	        'Oops, it looks like you have no items! ',
 	        React.createElement('br', null),
-	        item.name,
-	        React.createElement('br', null),
-	        React.createElement(
-	          'tag',
-	          null,
-	          item.description
-	        )
+	        'Buy something in the store first!'
 	      );
-	    });
+	    }
 	
 	    return React.createElement(
 	      'div',

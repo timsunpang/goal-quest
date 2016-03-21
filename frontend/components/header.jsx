@@ -32,6 +32,7 @@ var Header = React.createClass({
             <a onClick={this.handleHome} href="#"><img src="http://i66.tinypic.com/258xhf6.png" alt="logo"/></a>
           </h1>
           <ul className="header-list group">
+            <li><a onClick={this.handleHome} href="#">Goals</a></li>
             <li><a onClick={this.handleShop} href="#">Shop</a></li>
             <li><a onClick={this.handleEquipment} href="#">Equipment</a></li>
             <li><a onClick={this.logout} href="#">Logout</a></li>

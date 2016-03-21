@@ -121,17 +121,23 @@ var Equipment = React.createClass({
 
   render: function(){
     var that = this;
-    var items = this.state.items.map(function(item, i) {
-      var boundItemClick = that.handleEquipmentClick.bind(that, item)
 
-      return (
-        <div className="item" key={i} onClick={boundItemClick}>
+    if (this.state.items.length > 0) {
+      var items = this.state.items.map(function(item, i) {
+        var boundItemClick = that.handleEquipmentClick.bind(that, item)
+
+        return (
+          <div className="item" key={i} onClick={boundItemClick}>
           <picture><img src={item.picture_url}/></picture>
           <br/>{item.name}<br/>
           <tag>{item.description}</tag>
-        </div>
-      )
-    });
+          </div>
+        )
+      });
+    } else {
+      var items = <div className = "empty-eqpmt">Oops, it looks like you have no items! <br/>
+                  Buy something in the store first!</div>
+    }
 
     return (
     <div className="equipment-container">

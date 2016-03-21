@@ -44,7 +44,7 @@ var App = React.createClass({
 
   _onChangeUser: function(){
     this.setState({user: UserStore.retrieve()});
-    if (this.state.tour === false) {
+    if (this.state.tour === false && this.state.user.exp === 0) {
       this.giveTour();
       this.setState({tour: true})
     }
@@ -103,6 +103,8 @@ var App = React.createClass({
       }
     });
 
+    var next = tour.next.bind(tour);
+
     tour.addStep('introduction-step', {
       title: 'Welcome!',
       text: 'Welcome to GoalQuest!<br/>' +
@@ -124,7 +126,7 @@ var App = React.createClass({
     tour.addStep('step-2', {
       title: 'Welcome!',
       text: 'GoalQuest is a game where<br/>' +
-            'you can track your goals in real life<br/>' +
+            'you can track your real life goals<br/>' +
             'in a fun, interactive way!',
       attachTo: '#card-container top',
       when: {
@@ -161,7 +163,7 @@ var App = React.createClass({
     tour.addStep('step-4', {
       title: 'Sidebar',
       text: 'This displays your current level, gold, and goals completed.<br/>',
-      attachTo: '.profile-info h2 right',
+      attachTo: '.profile-info h2 top',
       when: {
         show: function () {
           window.scrollTo(0, 0);
@@ -214,7 +216,7 @@ var App = React.createClass({
 
     tour.addStep('step-7', {
       title: 'Goals',
-      text: 'These are your goals. You can create, edit, or complete <br/>' +
+      text: 'These are your goals. You can create, edit, or complete ' +
             'goals. Every time you complete a gold, you gain EXP and gold!',
       attachTo: '#card right',
       when: {
@@ -232,7 +234,7 @@ var App = React.createClass({
 
     tour.addStep('step-8', {
       title: 'Goals',
-      text: 'What you define as your goals are completely up to you.<br/>' +
+      text: 'What you define as your goals are completely up to you. ' +
             "Choose whatever you like, but don't cheat!",
       attachTo: '#card right',
       when: {
@@ -251,7 +253,7 @@ var App = React.createClass({
     tour.addStep('step-9', {
       title: 'Navigation',
       text: 'This is your navigation bar.<br/>' +
-            "Click on Shop to continue!",
+            "Click next to continue!",
       attachTo: '.header-list bottom',
       when: {
         show: function () {
@@ -261,7 +263,12 @@ var App = React.createClass({
       buttons: [
         {
           text: 'Next',
-          action: tour.next
+          action: function(){
+            hashHistory.push("/shop");
+            setTimeout(function () {
+              tour.next();
+            }, 1000);
+          }
         }
       ]
     });
@@ -304,7 +311,7 @@ var App = React.createClass({
 
     tour.addStep('step-12', {
       title: 'Equipment',
-      text: 'Click on Equipment to continue!',
+      text: 'Now for equipment. Click next to continue!',
       attachTo: '.header-list bottom',
       when: {
         show: function () {
@@ -314,7 +321,12 @@ var App = React.createClass({
       buttons: [
         {
           text: 'Next',
-          action: tour.next
+          action: function(){
+            hashHistory.push("/equipment");
+            setTimeout(function () {
+              tour.next();
+            }, 1000);
+          }
         }
       ]
     });
@@ -323,8 +335,7 @@ var App = React.createClass({
     title: 'Equipment',
     text: 'This is your equipment page. <br/>' +
     'You can equip or consume any item you bought <br/>' +
-    'by clicking on the item. You can also unequip by <br/>' +
-    'clicking on something that you already equipped',
+    'by clicking on the item.',
     attachTo: '.equipment-header right',
     when: {
       show: function () {
@@ -335,6 +346,41 @@ var App = React.createClass({
       {
         text: 'Next',
         action: tour.next
+      }
+    ]
+  });
+
+  tour.addStep('step-14', {
+    title: 'Equipment',
+    text: 'You can also unequip by ' +
+    'clicking on something that you already equipped.',
+    attachTo: '.equipment-header right',
+    when: {
+      show: function () {
+        window.scrollTo(0, 0);
+      }
+    },
+    buttons: [
+      {
+        text: 'Next',
+        action: tour.next
+      }
+    ]
+  });
+
+  tour.addStep('step-15', {
+    title: 'End',
+    text: "That's it for the tour! Have fun!",
+    attachTo: '.equipment-header right',
+    when: {
+      show: function () {
+        window.scrollTo(0, 0);
+      }
+    },
+    buttons: [
+      {
+        text: 'End',
+        action: tour.complete
       }
     ]
   });
@@ -366,5 +412,5 @@ var App = React.createClass({
   );
 
 document.addEventListener("DOMContentLoaded", function(){
-  ReactDOM.render(<Router>{routes}</Router>, document.getElementById("content") )
+  ReactDOM.render(<Router history={hashHistory}>{routes}</Router>, document.getElementById("content") )
 });
