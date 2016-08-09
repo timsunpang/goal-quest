@@ -1,5 +1,5 @@
 == README
 
-GoalQuest is a web application for users to track their progress on different goals and habits. Inspired by HabitRPG, GoalQuest allows users to create personalized goals, collect in-game currency, and purchase different virtual accessories for their avatar.
+[GoalQuest](http://goal-quest.com) is a web application for users to track their progress on different goals and habits. Inspired by HabitRPG, GoalQuest allows users to create personalized goals, collect in-game currency, and purchase different virtual accessories for their avatar.
 
 GoalQuest is a personal project by Tim Pang.
